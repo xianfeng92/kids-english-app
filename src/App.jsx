@@ -1031,38 +1031,65 @@ export default function App() {
           </div>
         </header>
 
-        {/* 今日目标 - 图形化展示 */}
-        <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg border-b-4 border-blue-200">
-          <div className="flex items-center justify-between">
-            {/* 星星收集进度 */}
-            <div className="flex-1">
-              <div className="flex items-center gap-1 mb-3">
-                {[...Array(Math.min(8, Math.ceil(stars / 3)))].map((_, i) => (
-                  <span key={i} className="text-2xl">⭐</span>
-                ))}
-                {[...Array(Math.max(0, 8 - Math.ceil(stars / 3)))].map((_, i) => (
-                  <span key={i} className="text-2xl opacity-30">☆</span>
-                ))}
-              </div>
-              <div className="w-full bg-gray-100 h-4 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
-                  style={{ width: `${Math.min(100, (stars / 24) * 100)}%` }}
-                >
-                  {stars > 0 && <span className="text-xs font-bold text-yellow-700">{stars}</span>}
-                </div>
-              </div>
+        {/* 今日目标 - 星星收集路径图 */}
+        <div className="bg-white/90 backdrop-blur rounded-3xl p-5 shadow-lg border-b-4 border-blue-200">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-bold text-gray-600">今日星星收集</h3>
+            <span className="text-xs text-blue-500 font-medium">{Math.min(8, Math.floor(stars / 3))}/8 颗</span>
+          </div>
+
+          {/* 进度路径：云朵精灵走到苹果 */}
+          <div className="relative h-20 bg-gradient-to-r from-blue-50 to-yellow-50 rounded-2xl overflow-hidden">
+            {/* 路径线 */}
+            <div className="absolute top-1/2 left-8 right-12 h-1 bg-gray-200 -translate-y-1/2"></div>
+
+            {/* 8颗星星位置 */}
+            <div className="absolute inset-0 flex items-center justify-between px-6">
+              {[...Array(8)].map((_, i) => {
+                const collected = i < Math.floor(stars / 3);
+                const current = i === Math.floor(stars / 3) && stars % 3 !== 0;
+                return (
+                  <div key={i} className="relative">
+                    <div
+                      className={`text-xl transition-all duration-300 ${
+                        collected ? 'scale-110' : 'opacity-30 grayscale'
+                      } ${current ? 'animate-bounce scale-125' : ''}`}
+                    >
+                      {collected || current ? '⭐' : '☆'}
+                    </div>
+                    {current && (
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full animate-ping"></div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* 贴纸墙预览 */}
-            <div className="ml-4 flex flex-col items-center">
-              <div className="bg-purple-100 rounded-2xl p-2 min-w-[80px] text-center">
-                <div className="text-2xl mb-1">
-                  {stickers.length > 0 ? stickers.slice(-3).join(' ') : '📒'}
-                </div>
-                <div className="text-xs text-purple-600 font-bold">{stickers.length} 个贴纸</div>
-              </div>
+            {/* 云朵精灵位置 - 根据进度移动 */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 transition-all duration-500 ease-out"
+              style={{
+                left: `${Math.min(85, 8 + (stars / 24) * 75)}%`,
+                transform: 'translate(-50%, -50%)'
+              }}
+            >
+              <div className="text-3xl animate-float">☁️</div>
             </div>
+
+            {/* 终点苹果 */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-3xl">
+              🍎
+            </div>
+          </div>
+
+          {/* 进度提示 */}
+          <div className="mt-3 flex items-center justify-center gap-2 text-sm">
+            <span className="text-gray-500">
+              {Math.floor(stars / 3) >= 8
+                ? '🎉 今天任务全部完成！'
+                : `再收集 ${8 - Math.floor(stars / 3)} 颗星星就能吃到苹果啦！`
+              }
+            </span>
           </div>
         </div>
 
