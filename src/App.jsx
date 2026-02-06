@@ -986,38 +986,109 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-sky-50 flex flex-col items-center justify-center p-6 w-full font-sans text-gray-800 relative">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 via-blue-50 to-white flex flex-col items-center justify-center p-4 w-full font-sans relative overflow-hidden">
+      {/* 背景装饰云朵 */}
+      <div className="absolute top-10 left-10 text-6xl opacity-20 animate-float" style={{animationDelay: '0s'}}>☁️</div>
+      <div className="absolute top-20 right-16 text-4xl opacity-20 animate-float" style={{animationDelay: '1s'}}>☁️</div>
+      <div className="absolute bottom-32 left-16 text-5xl opacity-20 animate-float" style={{animationDelay: '2s'}}>☁️</div>
+      <div className="absolute bottom-20 right-10 text-4xl opacity-20 animate-float" style={{animationDelay: '1.5s'}}>☁️</div>
+
       <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage(null)} />
-      <div className="absolute top-6 right-6 flex items-center gap-1 bg-white px-3 py-1 rounded-full shadow-sm font-bold text-yellow-500">
-         <span>{stars}</span> <Icon path={Icons.Star} size={18} className="fill-current"/>
-      </div>
-      <div className="w-full max-w-md md:max-w-xl flex flex-col gap-6">
-        <header className="w-full flex justify-between items-center mb-2">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-500 text-white p-2 rounded-lg shadow-md"><Icon path={Icons.Star} /></div>
-            <h1 className="text-xl font-black text-gray-700">DUDU 天天英语</h1>
+
+      <div className="w-full max-w-md flex flex-col gap-5 relative z-10">
+        {/* 头部：云朵精灵打招呼 */}
+        <header className="flex flex-col items-center gap-3 mb-2">
+          <div className="flex items-center gap-3">
+            <Mascot speaking={false} className="w-20 h-20" />
+            <div className="bg-white/80 backdrop-blur rounded-2xl px-4 py-2 shadow-lg">
+              <h1 className="text-2xl font-black text-gray-700">DUDU 天天英语</h1>
+              <p className="text-sm text-gray-500">Let's learn together! ☁️</p>
+            </div>
           </div>
-          <button onClick={() => setView('parent')} className="text-gray-400 p-2 bg-white rounded-lg shadow-sm hover:text-blue-500 transition-colors"><Icon path={Icons.Settings} size={20}/></button>
         </header>
-        <div className="w-full bg-white rounded-3xl p-8 shadow-lg text-center border-b-4 border-blue-100">
-          <h2 className="text-gray-400 font-bold uppercase tracking-wider text-xs mb-2">今日目标</h2>
-          <div className="flex justify-center items-end gap-2 mb-4">
-             <span className="text-6xl font-black text-blue-500">0</span>
-             <span className="text-2xl font-bold text-gray-300 mb-2">/ 8</span>
+
+        {/* 今日目标 - 图形化展示 */}
+        <div className="bg-white/90 backdrop-blur rounded-3xl p-6 shadow-lg border-b-4 border-blue-200">
+          <div className="flex items-center justify-between">
+            {/* 星星收集进度 */}
+            <div className="flex-1">
+              <div className="flex items-center gap-1 mb-3">
+                {[...Array(Math.min(8, Math.ceil(stars / 3)))].map((_, i) => (
+                  <span key={i} className="text-2xl">⭐</span>
+                ))}
+                {[...Array(Math.max(0, 8 - Math.ceil(stars / 3)))].map((_, i) => (
+                  <span key={i} className="text-2xl opacity-30">☆</span>
+                ))}
+              </div>
+              <div className="w-full bg-gray-100 h-4 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                  style={{ width: `${Math.min(100, (stars / 24) * 100)}%` }}
+                >
+                  {stars > 0 && <span className="text-xs font-bold text-yellow-700">{stars}</span>}
+                </div>
+              </div>
+            </div>
+
+            {/* 贴纸墙预览 */}
+            <div className="ml-4 flex flex-col items-center">
+              <div className="bg-purple-100 rounded-2xl p-2 min-w-[80px] text-center">
+                <div className="text-2xl mb-1">
+                  {stickers.length > 0 ? stickers.slice(-3).join(' ') : '📒'}
+                </div>
+                <div className="text-xs text-purple-600 font-bold">{stickers.length} 个贴纸</div>
+              </div>
+            </div>
           </div>
-          <div className="w-full bg-gray-100 h-3 rounded-full overflow-hidden"><div className="w-0 h-full bg-blue-500 rounded-full"></div></div>
-          <div className="flex justify-between mt-6 text-sm font-medium">
-             <div className="flex flex-col"><span className="text-green-500 font-bold">{homeStats.masteredCount}</span><span className="text-gray-400">已掌握</span></div>
-             <div className="flex flex-col"><span className="text-orange-500 font-bold">{homeStats.dueCount}</span><span className="text-gray-400">待复习</span></div>
+        </div>
+
+        {/* 成就展示 - 图形化 */}
+        <div className="flex gap-3">
+          {/* 已掌握 - 皇冠 */}
+          <div className="flex-1 bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-4 text-center shadow-sm border-2 border-green-200">
+            <div className="text-3xl mb-1">🏆</div>
+            <div className="text-2xl font-black text-green-600">{homeStats.masteredCount}</div>
+            <div className="text-xs text-green-600 font-medium">学会啦</div>
+          </div>
+
+          {/* 待复习 - 时钟 */}
+          <div className="flex-1 bg-gradient-to-br from-orange-50 to-amber-100 rounded-2xl p-4 text-center shadow-sm border-2 border-orange-200">
+            <div className="text-3xl mb-1">🔔</div>
+            <div className="text-2xl font-black text-orange-600">{homeStats.dueCount}</div>
+            <div className="text-xs text-orange-600 font-medium">要复习</div>
           </div>
         </div>
-        <div className="w-full space-y-4">
-          <button onClick={() => startSession('daily')} className="w-full bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-2xl shadow-lg shadow-blue-200 transform active:scale-[0.98] transition-all flex items-center justify-center gap-3"><div className="bg-white/20 p-2 rounded-full"><Icon path={Icons.Play} /></div><span className="text-xl font-bold">开始今日任务</span></button>
-          <button onClick={() => startSession('review_box')} className="w-full bg-white hover:bg-gray-50 text-indigo-600 p-6 rounded-2xl shadow-sm border-2 border-indigo-100 transform active:scale-[0.98] transition-all flex items-center justify-center gap-3"><Icon path={Icons.RotateCcw} /><span className="text-lg font-bold">复习盒 ({homeStats.dueCount})</span></button>
+
+        {/* 主按钮 - 大而吸引人 */}
+        <div className="space-y-3">
+          <button
+            onClick={() => startSession('daily')}
+            className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white p-6 rounded-3xl shadow-xl shadow-blue-200 transform active:scale-[0.97] transition-all flex items-center justify-center gap-4 relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <span className="text-4xl animate-bounce">🚀</span>
+            <span className="text-2xl font-black relative">开始探险！</span>
+          </button>
+
+          <button
+            onClick={() => startSession('review_box')}
+            className={`w-full ${homeStats.dueCount > 0 ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-200' : 'bg-gray-100 text-gray-400'} p-4 rounded-2xl transform active:scale-[0.97] transition-all flex items-center justify-center gap-3`}
+          >
+            <span className="text-2xl">📚</span>
+            <span className="font-bold">复习盒子</span>
+            {homeStats.dueCount > 0 && (
+              <span className="bg-white/30 px-2 py-1 rounded-full text-sm">{homeStats.dueCount}</span>
+            )}
+          </button>
         </div>
-        <div className="text-center">
-          <button onClick={handleResetData} className="text-gray-300 hover:text-red-400 inline-flex items-center gap-1 text-xs px-4 py-2"><Icon path={Icons.Trash} size={14} /> 重置所有数据</button>
-        </div>
+
+        {/* 设置按钮 - 不显眼 */}
+        <button
+          onClick={() => setView('parent')}
+          className="self-center text-gray-400 hover:text-gray-600 p-2 transition-colors"
+        >
+          <Icon path={Icons.Settings} size={20} />
+        </button>
       </div>
     </div>
   );
