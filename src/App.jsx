@@ -1041,31 +1041,31 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 via-blue-50 to-white flex flex-col items-center justify-center p-4 w-full font-sans relative overflow-hidden">
-      {/* 背景装饰云朵 - SVG */}
-      <svg className="absolute top-10 left-5 w-24 h-16 opacity-10 animate-float" style={{animationDelay: '0s'}} viewBox="0 0 100 60">
-        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
-        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-white flex flex-col items-center justify-center p-4 w-full font-sans relative overflow-hidden">
+      {/* 背景装饰云朵 - 暖色调 */}
+      <svg className="absolute top-10 left-5 w-24 h-16 opacity-15 animate-float" style={{animationDelay: '0s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#FED7AA"/>
+        <circle cx="30" cy="35" r="15" fill="#FED7AA"/>
+        <circle cx="70" cy="35" r="15" fill="#FED7AA"/>
+        <circle cx="50" cy="30" r="18" fill="#FED7AA"/>
       </svg>
-      <svg className="absolute top-24 right-8 w-20 h-12 opacity-10 animate-float" style={{animationDelay: '1s'}} viewBox="0 0 100 60">
-        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
-        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      <svg className="absolute top-24 right-8 w-20 h-12 opacity-15 animate-float" style={{animationDelay: '1s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#FDE68A"/>
+        <circle cx="30" cy="35" r="15" fill="#FDE68A"/>
+        <circle cx="70" cy="35" r="15" fill="#FDE68A"/>
+        <circle cx="50" cy="30" r="18" fill="#FDE68A"/>
       </svg>
-      <svg className="absolute bottom-40 left-8 w-28 h-18 opacity-10 animate-float" style={{animationDelay: '2s'}} viewBox="0 0 100 60">
-        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
-        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      <svg className="absolute bottom-40 left-8 w-28 h-18 opacity-15 animate-float" style={{animationDelay: '2s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#FCD34D"/>
+        <circle cx="30" cy="35" r="15" fill="#FCD34D"/>
+        <circle cx="70" cy="35" r="15" fill="#FCD34D"/>
+        <circle cx="50" cy="30" r="18" fill="#FCD34D"/>
       </svg>
-      <svg className="absolute bottom-24 right-5 w-20 h-12 opacity-10 animate-float" style={{animationDelay: '1.5s'}} viewBox="0 0 100 60">
-        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
-        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
-        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      <svg className="absolute bottom-24 right-5 w-20 h-12 opacity-15 animate-float" style={{animationDelay: '1.5s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#FBBF24"/>
+        <circle cx="30" cy="35" r="15" fill="#FBBF24"/>
+        <circle cx="70" cy="35" r="15" fill="#FBBF24"/>
+        <circle cx="50" cy="30" r="18" fill="#FBBF24"/>
       </svg>
 
       <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage(null)} />
@@ -1094,14 +1094,14 @@ export default function App() {
         </header>
 
         {/* 今日目标 - 星星收集路径图 */}
-        <div className="bg-white/90 backdrop-blur rounded-3xl p-5 shadow-lg border-b-4 border-blue-200">
+        <div className="bg-white/90 backdrop-blur rounded-3xl p-5 shadow-lg border-b-4 border-orange-200">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-bold text-gray-600">今日星星收集</h3>
-            <span className="text-xs text-blue-500 font-medium">{Math.min(8, Math.floor(stars / 3))}/8 颗</span>
+            <span className="text-xs text-orange-500 font-medium">{Math.min(8, Math.floor(stars / 3))}/8 颗</span>
           </div>
 
-          {/* 进度路径：云朵精灵走到苹果 */}
-          <div className="relative h-20 bg-gradient-to-r from-blue-50 to-yellow-50 rounded-2xl overflow-hidden">
+          {/* 进度路径：云朵精灵走到苹果 - 暖色调 */}
+          <div className="relative h-20 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl overflow-hidden">
             {/* 路径线 */}
             <div className="absolute top-1/2 left-8 right-12 h-1 bg-gray-200 -translate-y-1/2"></div>
 
@@ -1172,20 +1172,20 @@ export default function App() {
           </div>
         </div>
 
-        {/* 主按钮 - 大而吸引人 */}
+        {/* 主按钮 - 暖色调激发行动力 */}
         <div className="space-y-3">
           <button
             onClick={() => startSession('daily')}
-            className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white p-6 rounded-3xl shadow-xl shadow-blue-200 transform active:scale-[0.97] transition-all flex items-center justify-center gap-4 relative overflow-hidden group"
+            className="w-full bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 hover:from-orange-500 hover:via-amber-500 hover:to-yellow-500 text-white p-6 rounded-3xl shadow-xl shadow-orange-300 transform active:scale-[0.97] transition-all flex items-center justify-center gap-4 relative overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-300/50 to-amber-300/50 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             <span className="text-4xl animate-bounce">🚀</span>
             <span className="text-2xl font-black relative">开始探险！</span>
           </button>
 
           <button
             onClick={() => startSession('review_box')}
-            className={`w-full ${homeStats.dueCount > 0 ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-200' : 'bg-gray-100 text-gray-400'} p-4 rounded-2xl transform active:scale-[0.97] transition-all flex items-center justify-center gap-3`}
+            className={`w-full ${homeStats.dueCount > 0 ? 'bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 shadow-lg shadow-pink-200' : 'bg-gray-100 text-gray-400'} p-4 rounded-2xl transform active:scale-[0.97] transition-all flex items-center justify-center gap-3`}
           >
             <span className="text-2xl">📚</span>
             <span className="font-bold">复习盒子</span>
