@@ -1,40 +1,117 @@
-# Kids English App
+# DUDU 天天英语 ☁️
 
-A small React + Vite app for practicing English vocabulary with kids.
+一款专为儿童设计的英语学习应用，通过游戏化、多感官交互和可爱 IP 形象，让英语学习变得像冒险一样有趣。
 
-## Setup
+## ✨ 核心特色
 
-1. Install dependencies:
+### 🎮 游戏化学习
+- **星星收集路径**：可视化的进度展示，每学会一个词就能看到星星亮起
+- **神秘宝箱机制**：收集 8 颗星星解锁宝箱，满屏庆祝特效带来强烈成就感
+- **随机奖励系统**：完成学习获得贴纸，满星后解锁勋章或 DUDU 限定皮肤
+
+### ☁️ DUDU 云朵精灵 IP
+- **情绪同步**：DUDU 会根据学习状态变化表情（开心、思考、庆祝）
+- **语音交互**：点击 DUDU 可以听到英语问候和鼓励
+- **生动动画**：说话时嘴巴张合、招手打招呼、撒花庆祝
+
+### 🧠 多模态记忆强化
+- **视觉+听觉+触觉**：大图标、发音按钮、手势操作多管齐下
+- **奖励预览**：学习页顶部始终展示宝箱图标，暗示坚持有回报
+- **闪电提问**：证明"真的懂了"的互动问答，增强记忆深度
+
+### 👨‍👩‍👧 家长友好
+- **家长锁**：重置数据需要回答数学题，防止孩子误操作
+- **AI 学情分析**：详细的学习报告、薄弱词列表、个性化建议
+- **完全本地化**：数据存储在浏览器，隐私安全
+
+## 🚀 快速开始
+
+### 安装依赖
 
 ```bash
 npm install
 ```
 
-2. Start the dev server:
+### 启动开发服务器
 
 ```bash
 npm run dev
 ```
 
-## Build
+### 构建生产版本
 
 ```bash
 npm run build
 ```
 
-## Preview Production Build
+### 预览生产构建
 
 ```bash
 npm run preview
 ```
 
-## Project Structure
+## 📁 项目结构
 
-- `src/`: React app entry and UI
-- `public/`: Static assets
-- `vite.config.js`, `tailwind.config.js`, `postcss.config.js`: Tooling config
+```
+src/
+├── App.jsx          # 主应用，包含所有组件
+├── index.css        # 全局样式和动画
+└── main.jsx         # 应用入口
+```
 
-## Notes
+## 🎨 设计理念
 
-- Store secrets in `.env` using the `VITE_` prefix.
-- Do not commit real secrets.
+### 1. 减少文字依赖
+针对不识字的孩子，所有按钮都配有：
+- 大图标（播放、宝箱、星星等）
+- 视觉反馈（动画、颜色变化）
+- 最少的必要文字
+
+### 2. 温暖色彩心理学
+- 主色调：橙色、黄色（活力、温暖）
+- 错误反馈：使用琥珀色而非红色（减少挫败感）
+- "听不懂"按钮：暖色调 + "再听一次"文案
+
+### 3. 即时反馈循环
+- 答对：撒花、星星、正向语音
+- 答错：温和鼓励、不过度惩罚
+- 进度可见：每一步都有视觉确认
+
+### 4. 因果关联强化
+- 星星路径 → 苹果 → 宝箱的视觉连接
+- 满星时苹果跳动、箭头指向宝箱
+- 点击宝箱触发满屏庆祝特效
+
+## 🔧 技术栈
+
+- **React** - UI 框架
+- **Vite** - 构建工具
+- **Tailwind CSS** - 样式框架
+- **Web Speech API** - 语音合成
+- **LocalStorage** - 数据持久化
+
+## 📝 注意事项
+
+- 如需使用 AI 功能（魔法百科），在 `.env` 文件中配置 `VITE_GEMINI_API_KEY`
+- 请勿提交真实的 API 密钥到仓库
+
+## 🎯 学习算法
+
+应用使用**间隔重复**算法：
+- 根据答题结果调整下次复习时间
+- 连续答对会增加掌握等级（Lv.1-5）
+- 答错后会缩短复习间隔，加强练习
+
+## 📊 数据说明
+
+所有学习数据存储在浏览器本地：
+- `kids_app_progress` - 学习进度
+- `kids_app_stars` - 收集的星星
+- `kids_app_stickers` - 获得的贴纸
+- `kids_app_settings` - 用户设置
+
+清除浏览器数据会重置所有进度。
+
+---
+
+Made with ☁️ for kids learning English
