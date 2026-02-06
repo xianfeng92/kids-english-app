@@ -972,6 +972,10 @@ export default function App() {
 
   if (view === 'lesson') {
     const item = sessionQueue[currentIdx];
+    if (!item) {
+      setView('home');
+      return null;
+    }
     const progress = progressMap[item.id] || { mastery: 0, streak: 0 };
     const progressPercent = ((currentIdx + 1) / sessionQueue.length) * 100;
     return <LessonView item={item} progress={progress} progressPercent={progressPercent} onResult={handleResult} onBack={() => setView('home')} feedback={feedback} settings={settings} />;
@@ -987,11 +991,31 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-100 via-blue-50 to-white flex flex-col items-center justify-center p-4 w-full font-sans relative overflow-hidden">
-      {/* 背景装饰云朵 */}
-      <div className="absolute top-10 left-10 text-6xl opacity-20 animate-float" style={{animationDelay: '0s'}}>☁️</div>
-      <div className="absolute top-20 right-16 text-4xl opacity-20 animate-float" style={{animationDelay: '1s'}}>☁️</div>
-      <div className="absolute bottom-32 left-16 text-5xl opacity-20 animate-float" style={{animationDelay: '2s'}}>☁️</div>
-      <div className="absolute bottom-20 right-10 text-4xl opacity-20 animate-float" style={{animationDelay: '1.5s'}}>☁️</div>
+      {/* 背景装饰云朵 - SVG */}
+      <svg className="absolute top-10 left-5 w-24 h-16 opacity-10 animate-float" style={{animationDelay: '0s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
+        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      </svg>
+      <svg className="absolute top-24 right-8 w-20 h-12 opacity-10 animate-float" style={{animationDelay: '1s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
+        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      </svg>
+      <svg className="absolute bottom-40 left-8 w-28 h-18 opacity-10 animate-float" style={{animationDelay: '2s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
+        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      </svg>
+      <svg className="absolute bottom-24 right-5 w-20 h-12 opacity-10 animate-float" style={{animationDelay: '1.5s'}} viewBox="0 0 100 60">
+        <ellipse cx="50" cy="40" rx="40" ry="15" fill="#7DD3FC"/>
+        <circle cx="30" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="70" cy="35" r="15" fill="#7DD3FC"/>
+        <circle cx="50" cy="30" r="18" fill="#7DD3FC"/>
+      </svg>
 
       <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage(null)} />
 
