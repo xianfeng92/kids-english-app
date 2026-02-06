@@ -29,7 +29,9 @@ const Icons = {
   Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
   ToggleLeft: <><rect width="20" height="12" x="2" y="6" rx="6" ry="6" /><circle cx="8" cy="12" r="2" /></>,
   ToggleRight: <><rect width="20" height="12" x="2" y="6" rx="6" ry="6" /><circle cx="16" cy="12" r="2" /></>,
-  Image: <><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>
+  Image: <><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></>,
+  ChevronDown: <polyline points="6 9 12 15 18 9" />,
+  ChevronUp: <polyline points="18 15 12 9 6 15" />
 };
 
 // --- 配置常量 ---
@@ -311,14 +313,61 @@ const LessonView = ({ item, progress, progressPercent, onResult, onBack, feedbac
   const [showAi, setShowAi] = useState(false);
   const [aiContent, setAiContent] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [showOralDefense, setShowOralDefense] = useState(false);
+  const [oralQuestion, setOralQuestion] = useState("");
+  const [oralPhase, setOralPhase] = useState<'question' | 'thinking' | 'answer'>('question');
+  const [showMetaInfo, setShowMetaInfo] = useState(false);
   const { speak, speaking, stop } = useSpeech(settings.voiceOn);
 
   useEffect(() => {
       setShowAi(false);
       setAiContent("");
       setAiLoading(false);
-      stop(); 
+      setShowOralDefense(false);
+      setOralQuestion("");
+      setOralPhase('question');
+      stop();
   }, [item]);
+
+  // 口头答辩 - 闪电提问
+  const handleOralDefense = async () => {
+    setShowOralDefense(true);
+    setOralPhase('question');
+    // 根据不同主题生成相关问题
+    const questions = {
+      fruits: `What color is a ${item.text}?`,
+      animals: `What sound does a ${item.text} make?`,
+      colors: `Can you find something ${item.text} around you?`,
+      family: `Is ${item.text} in your family?`,
+      greetings: `When do you say "${item.text}"?`,
+      school: `Do you have a ${item.text} in your bag?`,
+      nature: `Can you see ${item.text} outside today?`,
+      transport: `Does a ${item.text} fly or drive on the road?`,
+      clothes: `Do you wear ${item.text} on your hands or feet?`,
+      toys: `Is a ${item.text} soft or hard?`,
+      numbers: `How many ${item.text}? Show me with your fingers!`,
+      phrases: `Say "${item.text}" to me!`
+    };
+    const defaultQuestion = `Can you use "${item.text}" in a sentence?`;
+    setOralQuestion(questions[item.topic] || defaultQuestion);
+    // 稍后播报问题
+    setTimeout(() => {
+      speak(questions[item.topic] || defaultQuestion);
+    }, 500);
+  };
+
+  const handleOralAnswer = (knowsIt) => {
+    setOralPhase('answer');
+    if (knowsIt) {
+      speak(`Great job! You really know ${item.text}!`);
+    } else {
+      speak(`No worries! Let's learn more about ${item.text}. You can try again later!`);
+    }
+    setTimeout(() => {
+      setShowOralDefense(false);
+      setOralPhase('question');
+    }, 3000);
+  };
 
   const handleAskAi = async () => {
     setShowAi(true);
@@ -357,6 +406,55 @@ const LessonView = ({ item, progress, progressPercent, onResult, onBack, feedbac
                   ) : (
                       <div className="text-left bg-yellow-50 p-4 rounded-2xl text-gray-700 whitespace-pre-wrap leading-relaxed text-lg">{aiContent}</div>
                   )}
+                  <p className="text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
+                    <Icon path={Icons.Brain} size={12} /> 小提示：AI 可能会犯错，记得和爸爸妈妈确认哦！
+                  </p>
+               </div>
+            </div>
+         </div>
+      )}
+
+      {/* 口头答辩 - 闪电提问 */}
+      {showOralDefense && (
+         <div className="absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border-4 border-purple-200 relative">
+               <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white p-3 rounded-full shadow-lg flex items-center justify-center">
+                  <Icon path={Icons.Brain} size={24} />
+               </div>
+               <div className="mt-6 text-center">
+                  <h3 className="font-bold text-xl text-purple-600 mb-2">⚡ 闪电提问</h3>
+                  <p className="text-sm text-gray-500 mb-4">证明你真的懂了！</p>
+
+                  {oralPhase === 'question' && (
+                     <>
+                        <div className="bg-purple-50 p-4 rounded-2xl mb-6">
+                           <p className="text-lg font-medium text-gray-700">{oralQuestion}</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                           <button
+                             onClick={() => handleOralAnswer(true)}
+                             className="bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold active:scale-95 transition-all flex flex-col items-center gap-1"
+                           >
+                             <Icon path={Icons.Check} size={24} />
+                             <span>我知道！</span>
+                           </button>
+                           <button
+                             onClick={() => handleOralAnswer(false)}
+                             className="bg-orange-100 hover:bg-orange-200 text-orange-600 py-3 rounded-xl font-bold active:scale-95 transition-all flex flex-col items-center gap-1"
+                           >
+                             <Icon path={Icons.X} size={24} />
+                             <span>不太清楚</span>
+                           </button>
+                        </div>
+                     </>
+                  )}
+
+                  {oralPhase === 'answer' && (
+                     <div className="py-4">
+                        <div className="text-6xl mb-4 animate-bounce">🎯</div>
+                        <p className="text-gray-600">继续加油！</p>
+                     </div>
+                  )}
                </div>
             </div>
          </div>
@@ -374,7 +472,47 @@ const LessonView = ({ item, progress, progressPercent, onResult, onBack, feedbac
         </div>
 
         <div className="w-full max-w-md md:max-w-2xl bg-white rounded-[2rem] shadow-xl p-8 pt-12 flex flex-col items-center justify-center gap-6 min-h-[400px] md:min-h-[500px] relative border border-gray-100 transition-all duration-300">
-           <div className="absolute top-6 right-6 flex items-center gap-1 text-xs font-bold text-gray-300 bg-gray-50 px-2 py-1 rounded-full"><span>Lv.{progress.mastery}</span></div>
+           {/* 掌握度指示器 - 可点击查看详情 */}
+           <button
+             onClick={() => setShowMetaInfo(!showMetaInfo)}
+             className="absolute top-6 right-6 flex items-center gap-1 text-xs font-bold bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-3 py-1.5 rounded-full hover:from-blue-600 hover:to-indigo-600 transition-all cursor-pointer"
+           >
+             <span>Lv.{progress.mastery}</span>
+             <Icon path={showMetaInfo ? Icons.ChevronUp : Icons.ChevronDown} size={14} />
+           </button>
+
+           {/* 元认知信息面板 */}
+           {showMetaInfo && (
+             <div className="absolute top-16 right-6 bg-white/95 backdrop-blur rounded-2xl p-4 shadow-xl border border-blue-100 w-56 animate-in fade-in slide-in-from-top-2">
+                <h4 className="font-bold text-gray-700 text-sm mb-3 flex items-center gap-1">
+                  <Icon path={Icons.Brain} size={14} /> 学习大脑
+                </h4>
+                <div className="space-y-2 text-xs">
+                   <div className="flex justify-between">
+                     <span className="text-gray-500">掌握等级</span>
+                     <span className="font-bold text-blue-600">{progress.mastery}/5</span>
+                   </div>
+                   <div className="flex justify-between">
+                     <span className="text-gray-500">连续答对</span>
+                     <span className="font-bold text-green-600">{progress.streak} 次</span>
+                   </div>
+                   <div className="flex justify-between">
+                     <span className="text-gray-500">答错次数</span>
+                     <span className="font-bold text-orange-600">{progress.lapses} 次</span>
+                   </div>
+                   <div className="border-t pt-2 mt-2">
+                     <span className="text-gray-500">
+                       {progress.mastery === 0 && "🌱 新单词，加油！"}
+                       {progress.mastery === 1 && "📝 开始熟悉了"}
+                       {progress.mastery === 2 && "👍 逐渐掌握中"}
+                       {progress.mastery === 3 && "💪 记得很牢了"}
+                       {progress.mastery >= 4 && "🏆 已完全掌握！"}
+                     </span>
+                   </div>
+                </div>
+             </div>
+           )}
+
            <span className="bg-blue-50 text-blue-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">{item.topic}</span>
            <div className="text-[6rem] md:text-[8rem] leading-none animate-bounce-slow filter drop-shadow-lg transition-all duration-300">{item.image}</div>
            
@@ -383,15 +521,18 @@ const LessonView = ({ item, progress, progressPercent, onResult, onBack, feedbac
                <h1 className="text-4xl md:text-5xl font-black text-gray-800 transition-all duration-300">{item.text}</h1>
              </div>
              
-             <div className="flex justify-center gap-4 mt-2">
-                <button 
-                  onClick={handleListen} 
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-bold shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center gap-2"
+             <div className="flex justify-center gap-3 mt-2">
+                <button
+                  onClick={handleListen}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-full font-bold shadow-lg shadow-blue-200 active:scale-95 transition-all flex items-center gap-2"
                 >
                   <Icon path={Icons.Speaker} className="animate-pulse" />
                   Listen
                 </button>
-                <button onClick={handleAskAi} className="bg-yellow-100 text-yellow-600 p-3 rounded-full hover:bg-yellow-200 active:scale-95 transition-all shadow-sm">
+                <button onClick={handleOralDefense} className="bg-purple-100 text-purple-600 p-3 rounded-full hover:bg-purple-200 active:scale-95 transition-all shadow-sm" title="闪电提问 - 证明你真的懂了">
+                  <Icon path={Icons.Brain} size={24} />
+                </button>
+                <button onClick={handleAskAi} className="bg-yellow-100 text-yellow-600 p-3 rounded-full hover:bg-yellow-200 active:scale-95 transition-all shadow-sm" title="魔法百科 - AI 帮你扩展知识">
                   <Icon path={Icons.Sparkles} size={24} />
                 </button>
              </div>
