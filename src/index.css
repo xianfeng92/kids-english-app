@@ -21,3 +21,44 @@ body {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+/* 宝箱摇晃动画 */
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.animate-[wiggle_1s_ease-in-out_infinite] {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+/* 宝箱闪光效果 */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-[shimmer_2s_infinite] {
+  animation: shimmer 2s infinite;
+}
+
+/* 旋转动画 - 用于星星绕圈 */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-[spin_3s_linear_infinite] {
+  animation: spin 3s linear infinite;
+}
+
+/* 招手动画 */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+.animate-[wave_1s_ease-in-out_infinite] {
+  animation: wave 1s ease-in-out infinite;
+}
