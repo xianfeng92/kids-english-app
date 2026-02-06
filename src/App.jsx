@@ -229,7 +229,7 @@ const useSpeech = (voiceOn = true) => {
 
 const Mascot = ({ speaking, className = "" }) => {
   const [blinking, setBlinking] = useState(false);
-  
+
   useEffect(() => {
     const blinkLoop = setInterval(() => {
       if (!speaking && Math.random() > 0.7) {
@@ -242,47 +242,96 @@ const Mascot = ({ speaking, className = "" }) => {
 
   return (
     <div className={`relative w-32 h-32 ${className}`}>
-      {/* 3D-ish Cartoon Robot/Monster */}
-      <div className={`w-full h-full animate-[bounce_3s_infinite] ${speaking ? 'animate-[pulse_0.5s_infinite]' : ''}`}>
+      {/* 云朵精灵 Cloud Sprite */}
+      <div className={`w-full h-full ${speaking ? 'animate-[bounce_1s_infinite]' : 'animate-[float_3s_ease-in-out_infinite]'}`}>
         <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-xl">
           <defs>
-            <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#60A5FA" />
-              <stop offset="100%" stopColor="#3B82F6" />
+            <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#FFFFFF" />
+              <stop offset="100%" stopColor="#E0F2FE" />
             </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            <linearGradient id="cheekGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FECACA" />
+              <stop offset="100%" stopColor="#FCA5A5" />
+            </linearGradient>
+            <filter id="cloudShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="4" stdDeviation="3" floodColor="#0EA5E9" floodOpacity="0.2"/>
             </filter>
           </defs>
-          <path d="M100 40 L100 20" stroke="#9CA3AF" strokeWidth="4" />
-          <circle cx="100" cy="20" r="6" fill="#EF4444" className={speaking ? "animate-ping" : ""} />
-          <rect x="40" y="40" width="120" height="110" rx="40" fill="url(#bodyGrad)" stroke="#2563EB" strokeWidth="4" />
-          <rect x="60" y="70" width="80" height="40" rx="15" fill="#1F2937" opacity="0.9" />
+
+          {/* 云朵身体 - 由多个圆形组成 */}
+          <g filter="url(#cloudShadow)">
+            {/* 主云朵 */}
+            <ellipse cx="100" cy="110" rx="70" ry="35" fill="url(#cloudGrad)" />
+            <circle cx="50" cy="100" r="30" fill="url(#cloudGrad)" />
+            <circle cx="150" cy="100" r="30" fill="url(#cloudGrad)" />
+            <circle cx="75" cy="80" r="35" fill="url(#cloudGrad)" />
+            <circle cx="125" cy="80" r="35" fill="url(#cloudGrad)" />
+            <circle cx="100" cy="70" r="30" fill="url(#cloudGrad)" />
+
+            {/* 小云朵装饰 - 像小翅膀 */}
+            <ellipse cx="35" cy="120" rx="15" ry="10" fill="#DBEAFE" opacity="0.8" />
+            <ellipse cx="165" cy="120" rx="15" ry="10" fill="#DBEAFE" opacity="0.8" />
+          </g>
+
+          {/* 眼睛 */}
           <g transform="translate(0, 5)">
-             {blinking ? (
-               <>
-               <line x1="75" y1="90" x2="85" y2="90" stroke="#34D399" strokeWidth="3" strokeLinecap="round" />
-               <line x1="115" y1="90" x2="125" y2="90" stroke="#34D399" strokeWidth="3" strokeLinecap="round" />
-               </>
-             ) : (
-               <>
-               <circle cx="80" cy="90" r="6" fill="#34D399" filter="url(#glow)" />
-               <circle cx="120" cy="90" r="6" fill="#34D399" filter="url(#glow)" />
-               </>
-             )}
+            {blinking ? (
+              <>
+                <line x1="75" y1="95" x2="90" y2="95" stroke="#374151" strokeWidth="3" strokeLinecap="round" />
+                <line x1="110" y1="95" x2="125" y2="95" stroke="#374151" strokeWidth="3" strokeLinecap="round" />
+              </>
+            ) : (
+              <>
+                {/* 左眼 */}
+                <ellipse cx="82" cy="95" rx="10" ry="12" fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
+                <circle cx="82" cy="97" r="5" fill="#1F2937">
+                  <animate attributeName="cy" values="97;95;97" dur="3s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="84" cy="93" r="2" fill="#FFFFFF" opacity="0.8"/>
+
+                {/* 右眼 */}
+                <ellipse cx="118" cy="95" rx="10" ry="12" fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
+                <circle cx="118" cy="97" r="5" fill="#1F2937">
+                  <animate attributeName="cy" values="97;95;97" dur="3s" repeatCount="indefinite" />
+                </circle>
+                <circle cx="120" cy="93" r="2" fill="#FFFFFF" opacity="0.8"/>
+              </>
+            )}
           </g>
-          <g transform="translate(100, 125)">
-             {speaking ? (
-                <path fill="#FFFFFF" d="M-15 0 Q0 15 15 0 Q0 -5 -15 0 Z">
-                   <animate attributeName="d" values="M-15 0 Q0 5 15 0 Q0 -2 -15 0 Z; M-15 0 Q0 20 15 0 Q0 -5 -15 0 Z; M-15 0 Q0 5 15 0 Q0 -2 -15 0 Z" dur="0.2s" repeatCount="indefinite" />
-                </path>
-             ) : (
-                <path d="M-10 0 Q 0 8 10 0" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" />
-             )}
+
+          {/* 腮红 */}
+          <ellipse cx="60" cy="108" rx="10" ry="6" fill="url(#cheekGrad)" opacity="0.6" />
+          <ellipse cx="140" cy="108" rx="10" ry="6" fill="url(#cheekGrad)" opacity="0.6" />
+
+          {/* 嘴巴 */}
+          <g transform="translate(100, 115)">
+            {speaking ? (
+              <path fill="#374151" d="M-8 0 Q0 8 8 0 Q0 -3 -8 0 Z">
+                <animate attributeName="d" values="M-8 0 Q0 6 8 0 Q0 -2 -8 0 Z;M-8 0 Q0 10 8 0 Q0 -4 -8 0 Z;M-8 0 Q0 6 8 0 Q0 -2 -8 0 Z" dur="0.2s" repeatCount="indefinite" />
+              </path>
+            ) : (
+              <path d="M-6 2 Q 0 8 6 2" fill="none" stroke="#374151" strokeWidth="2.5" strokeLinecap="round" />
+            )}
           </g>
-          <circle cx="55" cy="110" r="6" fill="#FCA5A5" opacity="0.6" />
-          <circle cx="145" cy="110" r="6" fill="#FCA5A5" opacity="0.6" />
+
+          {/* 说话时的声波 */}
+          {speaking && (
+            <g opacity="0.4">
+              <circle cx="100" cy="50" r="5" fill="#60A5FA">
+                <animate attributeName="r" values="5;15;5" dur="1s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="1s" repeatCount="indefinite" />
+              </circle>
+              <circle cx="70" cy="60" r="4" fill="#60A5FA">
+                <animate attributeName="r" values="4;12;4" dur="1.2s" repeatCount="indefinite" begin="0.3s"/>
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="1.2s" repeatCount="indefinite" begin="0.3s"/>
+              </circle>
+              <circle cx="130" cy="60" r="4" fill="#60A5FA">
+                <animate attributeName="r" values="4;12;4" dur="1.1s" repeatCount="indefinite" begin="0.5s"/>
+                <animate attributeName="opacity" values="0.4;0;0.4" dur="1.1s" repeatCount="indefinite" begin="0.5s"/>
+              </circle>
+            </g>
+          )}
         </svg>
       </div>
     </div>
