@@ -227,8 +227,9 @@ const useSpeech = (voiceOn = true) => {
 
 // --- Sub Components ---
 
-const Mascot = ({ speaking, className = "" }) => {
+const Mascot = ({ speaking, className = "", mood = "happy" }) => {
   const [blinking, setBlinking] = useState(false);
+  const [waving, setWaving] = useState(false);
 
   useEffect(() => {
     const blinkLoop = setInterval(() => {
@@ -237,11 +238,44 @@ const Mascot = ({ speaking, className = "" }) => {
         setTimeout(() => setBlinking(false), 200);
       }
     }, 3000);
-    return () => clearInterval(blinkLoop);
-  }, [speaking]);
+
+    // 招手动画循环
+    const waveLoop = setInterval(() => {
+      if (mood === "welcoming" && !speaking) {
+        setWaving(true);
+        setTimeout(() => setWaving(false), 1000);
+      }
+    }, 4000);
+
+    return () => {
+      clearInterval(blinkLoop);
+      clearInterval(waveLoop);
+    };
+  }, [speaking, mood]);
+
+  // 根据情绪调整表情
+  const getMouthPath = () => {
+    if (speaking) return null; // 说话时用动画嘴巴
+    switch(mood) {
+      case "excited": return "M-8 3 Q 0 12 8 3"; // 大笑
+      case "welcoming": return "M-6 4 Q 0 10 6 4"; // 微笑
+      case "thinking": return "M-4 6 Q 0 4 4 6"; // 思考状
+      default: return "M-6 2 Q 0 8 6 2"; // 普通微笑
+    }
+  };
+
+  const getEyeStyle = () => {
+    if (mood === "excited") {
+      // 兴奋时眼睛更大
+      return { rx: 12, ry: 14 };
+    }
+    return { rx: 10, ry: 12 };
+  };
+
+  const eyeStyle = getEyeStyle();
 
   return (
-    <div className={`relative w-32 h-32 ${className}`}>
+    <div className={`relative ${className}`}>
       {/* 云朵精灵 Cloud Sprite */}
       <div className={`w-full h-full ${speaking ? 'animate-[bounce_1s_infinite]' : 'animate-[float_3s_ease-in-out_infinite]'}`}>
         <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-xl">
@@ -274,7 +308,7 @@ const Mascot = ({ speaking, className = "" }) => {
             <ellipse cx="165" cy="120" rx="15" ry="10" fill="#DBEAFE" opacity="0.8" />
           </g>
 
-          {/* 眼睛 */}
+          {/* 眼睛 - 根据情绪变化 */}
           <g transform="translate(0, 5)">
             {blinking ? (
               <>
@@ -284,14 +318,14 @@ const Mascot = ({ speaking, className = "" }) => {
             ) : (
               <>
                 {/* 左眼 */}
-                <ellipse cx="82" cy="95" rx="10" ry="12" fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
+                <ellipse cx="82" cy="95" rx={eyeStyle.rx} ry={eyeStyle.ry} fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
                 <circle cx="82" cy="97" r="5" fill="#1F2937">
                   <animate attributeName="cy" values="97;95;97" dur="3s" repeatCount="indefinite" />
                 </circle>
                 <circle cx="84" cy="93" r="2" fill="#FFFFFF" opacity="0.8"/>
 
                 {/* 右眼 */}
-                <ellipse cx="118" cy="95" rx="10" ry="12" fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
+                <ellipse cx="118" cy="95" rx={eyeStyle.rx} ry={eyeStyle.ry} fill="#FFFFFF" stroke="#374151" strokeWidth="2"/>
                 <circle cx="118" cy="97" r="5" fill="#1F2937">
                   <animate attributeName="cy" values="97;95;97" dur="3s" repeatCount="indefinite" />
                 </circle>
@@ -300,20 +334,33 @@ const Mascot = ({ speaking, className = "" }) => {
             )}
           </g>
 
-          {/* 腮红 */}
-          <ellipse cx="60" cy="108" rx="10" ry="6" fill="url(#cheekGrad)" opacity="0.6" />
-          <ellipse cx="140" cy="108" rx="10" ry="6" fill="url(#cheekGrad)" opacity="0.6" />
+          {/* 腮红 - 兴奋时更红 */}
+          <ellipse cx="60" cy="108" rx={mood === "excited" ? 12 : 10} ry={mood === "excited" ? 7 : 6} fill="url(#cheekGrad)" opacity={mood === "excited" ? 0.8 : 0.6} />
+          <ellipse cx="140" cy="108" rx={mood === "excited" ? 12 : 10} ry={mood === "excited" ? 7 : 6} fill="url(#cheekGrad)" opacity={mood === "excited" ? 0.8 : 0.6} />
 
-          {/* 嘴巴 */}
+          {/* 嘴巴 - 根据情绪变化 */}
           <g transform="translate(100, 115)">
             {speaking ? (
               <path fill="#374151" d="M-8 0 Q0 8 8 0 Q0 -3 -8 0 Z">
                 <animate attributeName="d" values="M-8 0 Q0 6 8 0 Q0 -2 -8 0 Z;M-8 0 Q0 10 8 0 Q0 -4 -8 0 Z;M-8 0 Q0 6 8 0 Q0 -2 -8 0 Z" dur="0.2s" repeatCount="indefinite" />
               </path>
             ) : (
-              <path d="M-6 2 Q 0 8 6 2" fill="none" stroke="#374151" strokeWidth="2.5" strokeLinecap="round" />
+              <path d={getMouthPath()} fill="none" stroke="#374151" strokeWidth="2.5" strokeLinecap="round" />
             )}
           </g>
+
+          {/* 招手小云朵 */}
+          {waving && mood === "welcoming" && (
+            <g>
+              <ellipse cx="30" cy="100" rx="8" ry="5" fill="#DBEAFE" opacity="0.6">
+                <animate attributeName="cx" values="30;25;30" dur="0.5s" repeatCount="3" />
+                <animateTransform attributeName="transform" type="rotate" values="-10 30 100;10 30 100;-10 30 100" dur="0.5s" repeatCount="3" />
+              </ellipse>
+              <ellipse cx="25" cy="90" rx="6" ry="4" fill="#DBEAFE" opacity="0.4">
+                <animate attributeName="cx" values="25;20;25" dur="0.5s" repeatCount="3" begin="0.1s"/>
+              </ellipse>
+            </g>
+          )}
 
           {/* 说话时的声波 */}
           {speaking && (
@@ -345,9 +392,13 @@ const FeedbackOverlay = ({ feedback }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto">
       <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px] animate-in fade-in duration-200"></div>
-      <div className={`relative bg-white rounded-3xl p-8 shadow-2xl max-w-xs w-full mx-6 text-center transform transition-all animate-in zoom-in-95 duration-300 border-4 ${isEasy ? 'border-green-100' : 'border-orange-100'}`}>
-        <div className="text-6xl mb-4 animate-bounce">{isEasy ? (deltaStars > 1 ? '🌟' : '🎉') : '🛡️'}</div>
-        <h3 className={`text-2xl font-black mb-2 ${isEasy ? 'text-green-600' : 'text-orange-500'}`}>{message}</h3>
+      <div className={`relative bg-white rounded-3xl p-6 shadow-2xl max-w-sm w-full mx-6 text-center transform transition-all animate-in zoom-in-95 duration-300 border-4 ${isEasy ? 'border-green-100' : 'border-orange-100'}`}>
+        {/* DUDU 在反馈时出现 */}
+        <div className="flex justify-center mb-2">
+          <Mascot speaking={false} mood={isEasy ? "excited" : "welcoming"} className="w-20 h-20" />
+        </div>
+        <div className="text-4xl mb-2">{isEasy ? (deltaStars > 1 ? '🌟' : '🎉') : '💪'}</div>
+        <h3 className={`text-xl font-black mb-2 ${isEasy ? 'text-green-600' : 'text-orange-500'}`}>{message}</h3>
         {deltaStars > 0 && (
           <div className="mt-2 inline-flex items-center gap-1 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-bold text-sm animate-pulse">
             <span>+{deltaStars}</span> <Icon path={Icons.Star} size={16} className="fill-current"/>
@@ -1020,14 +1071,25 @@ export default function App() {
       <ErrorModal errorMessage={errorMessage} onClose={() => setErrorMessage(null)} />
 
       <div className="w-full max-w-md flex flex-col gap-5 relative z-10">
-        {/* 头部：云朵精灵打招呼 */}
-        <header className="flex flex-col items-center gap-3 mb-2">
-          <div className="flex items-center gap-3">
-            <Mascot speaking={false} className="w-20 h-20" />
-            <div className="bg-white/80 backdrop-blur rounded-2xl px-4 py-2 shadow-lg">
-              <h1 className="text-2xl font-black text-gray-700">DUDU 天天英语</h1>
-              <p className="text-sm text-gray-500">Let's learn together! ☁️</p>
+        {/* 头部：云朵精灵打招呼 - 更大的 IP 展示 */}
+        <header className="flex flex-col items-center gap-2 mb-2">
+          {/* DUDU 主形象 - 招手状态 */}
+          <div className="relative">
+            <Mascot speaking={false} mood="welcoming" className="w-28 h-28" />
+            {/* 对话气泡 */}
+            <div className="absolute -right-4 -top-2 bg-white rounded-2xl px-3 py-2 shadow-lg border-2 border-blue-200 animate-bounce" style={{animationDuration: '2s'}}>
+              <span className="text-sm">
+                {Math.floor(stars / 3) >= 8 ? "今天太棒了！🎉" : "来一起玩吧！✨"}
+              </span>
             </div>
+          </div>
+          <div className="bg-white/80 backdrop-blur rounded-2xl px-6 py-2 shadow-lg text-center">
+            <h1 className="text-2xl font-black text-gray-700">DUDU 天天英语</h1>
+            <p className="text-sm text-gray-500">
+              {stars === 0 ? "我是云朵精灵 DUDU，我们要去吃苹果啦！☁️"
+               : Math.floor(stars / 3) >= 8 ? "我们到终点啦！🎉"
+               : `我们已经收集了 ${Math.floor(stars / 3)} 颗星星！`}
+            </p>
           </div>
         </header>
 
