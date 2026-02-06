@@ -364,7 +364,7 @@ const LessonView = ({ item, progress, progressPercent, onResult, onBack, feedbac
   const [aiLoading, setAiLoading] = useState(false);
   const [showOralDefense, setShowOralDefense] = useState(false);
   const [oralQuestion, setOralQuestion] = useState("");
-  const [oralPhase, setOralPhase] = useState<'question' | 'thinking' | 'answer'>('question');
+  const [oralPhase, setOralPhase] = useState('question');
   const [showMetaInfo, setShowMetaInfo] = useState(false);
   const { speak, speaking, stop } = useSpeech(settings.voiceOn);
 
