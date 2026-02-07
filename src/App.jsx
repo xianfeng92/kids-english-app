@@ -664,6 +664,144 @@ const useSpeech = (voiceOn = true) => {
 
 // --- Sub Components ---
 
+// === 启动页组件 (Identity Anchor) ===
+const SplashView = ({ onComplete, settings }) => {
+  const [phase, setPhase] = useState('entering');
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    // 进入动画
+    setTimeout(() => setShowContent(true), 100);
+
+    // 自动跳转到首页
+    const timer = setTimeout(() => {
+      setPhase('exiting');
+      setTimeout(() => onComplete(), 600);
+    }, 2800);
+
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <div className={`min-h-screen bg-gradient-to-br from-orange-400 via-amber-400 to-yellow-400 flex flex-col items-center justify-center p-4 relative overflow-hidden ${phase === 'exiting' ? 'animate-[fadeOut_0.6s_ease-out_forwards]' : ''}`}>
+      {/* 背景装饰 - 3D 旋转星星 */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-[float_4s_ease-in-out_infinite] opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              transform: `scale(${0.5 + Math.random()})`
+            }}
+          >
+            <span className="text-4xl">⭐</span>
+          </div>
+        ))}
+      </div>
+
+      {/* 3D 头像容器 - 带深度阴影和浮动效果 */}
+      <div className={`relative z-10 ${showContent ? 'animate-[scaleIn_0.8s_ease-out_forwards]' : 'opacity-0 scale-50'}`}>
+        {/* 3D 深度效果 - 多层阴影 */}
+        <div className="relative">
+          {/* 后层阴影 - 创造深度感 */}
+          <div className="absolute inset-0 bg-white/30 rounded-full blur-2xl transform translate-y-4 scale-95"></div>
+          <div className="absolute inset-0 bg-orange-300/40 rounded-full blur-xl transform translate-y-2 scale-90"></div>
+
+          {/* 主 3D 头像圆球 */}
+          <div className="relative w-40 h-40 sm:w-52 sm:h-52 bg-gradient-to-br from-white via-orange-50 to-amber-100 rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.3),inset_0_-10px_30px_rgba(255,200,100,0.4),inset_0_10px_30px_rgba(255,255,255,0.8)] flex items-center justify-center animate-[float_3s_ease-in-out_infinite] border-4 border-white/50">
+            {/* 3D 高光效果 */}
+            <div className="absolute top-4 left-6 w-16 h-10 bg-white/60 rounded-full blur-sm"></div>
+            <div className="absolute top-8 left-10 w-8 h-5 bg-white/80 rounded-full blur-xs"></div>
+
+            {/* DUDU 表情 */}
+            <div className="relative z-10 text-7xl sm:text-8xl animate-[bounce_2s_ease-in-out_infinite]">
+              😊
+            </div>
+
+            {/* 3D 边缘光 */}
+            <div className="absolute inset-0 rounded-full shadow-[inset_0_0_30px_rgba(255,200,100,0.3)]"></div>
+          </div>
+
+          {/* 旋转光环 */}
+          <div className="absolute -inset-4 animate-[spin_8s_linear_infinite]">
+            <div className="absolute inset-0 rounded-full border-2 border-dashed border-white/30"></div>
+            <div className="absolute -top-1 -left-1 w-4 h-4 bg-yellow-300 rounded-full shadow-lg"></div>
+            <div className="absolute -bottom-2 -right-2 w-3 h-3 bg-orange-300 rounded-full shadow-lg"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* 身份标题 - 3D 文字效果 */}
+      <div className={`relative z-10 mt-8 text-center ${showContent ? 'animate-[slideUp_0.6s_ease-out_0.3s_forwards]' : 'opacity-0 translate-y-8'}`}>
+        {/* 主标题 - 3D 阴影效果 */}
+        <h1 className="text-4xl sm:text-5xl font-black text-white drop-shadow-[0_4px_0_rgba(200,100,0,0.4),0_8px_0_rgba(200,100,0,0.2),0_12px_20px_rgba(0,0,0,0.3)] relative">
+          DUDU's Adventure World
+          {/* 装饰下划线 */}
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-2 bg-white/50 rounded-full blur-sm"></div>
+        </h1>
+
+        {/* 副标题 */}
+        <p className={`mt-4 text-xl sm:text-2xl font-bold text-orange-100 ${showContent ? 'animate-[fadeIn_0.6s_ease-out_0.6s_forwards]' : 'opacity-0'}`}>
+          探险开始！Let's Explore!
+        </p>
+      </div>
+
+      {/* 底部装饰 - 小星星弹跳 */}
+      <div className={`absolute bottom-16 flex gap-4 ${showContent ? 'animate-[fadeIn_0.6s_ease-out_0.9s_forwards]' : 'opacity-0'}`}>
+        {['🚀', '⭐', '🎨', '📚'].map((emoji, i) => (
+          <span
+            key={i}
+            className="text-3xl animate-bounce"
+            style={{ animationDelay: `${i * 0.15}s` }}
+          >
+            {emoji}
+          </span>
+        ))}
+      </div>
+
+      {/* 加载指示器 */}
+      <div className={`absolute bottom-8 ${showContent ? 'animate-[fadeIn_0.6s_ease-out_1.2s_forwards]' : 'opacity-0'}`}>
+        <div className="flex gap-2">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="w-3 h-3 bg-white/60 rounded-full animate-bounce"
+              style={{ animationDelay: `${i * 0.15}s` }}
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      {/* 自定义动画 */}
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-15px); }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.3); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 const Mascot = ({ speaking, className = "", mood = "happy" }) => {
   const [blinking, setBlinking] = useState(false);
   const [waving, setWaving] = useState(false);
@@ -1628,6 +1766,7 @@ function CelebrationView({ collectedStars, onContinue, settings }) {
 
   // 奖励类型随机
   const rewardTypes = [
+    { type: 'grand_prize', name: '大苹果大奖', emoji: '🍎', message: 'DUDU is so proud of you! You got the big apple!' },
     { type: 'badge', name: '探险家勋章', emoji: '🏅', message: 'You earned the Explorer Badge!' },
     { type: 'badge', name: '勇气勋章', emoji: '🎖️', message: 'You earned the Brave Heart Badge!' },
     { type: 'badge', name: '智慧勋章', emoji: '🎓', message: 'You earned the Wisdom Badge!' },
@@ -1636,9 +1775,14 @@ function CelebrationView({ collectedStars, onContinue, settings }) {
     { type: 'skin', name: '彩虹 DUDU', emoji: '☁️🌈', message: 'Rainbow DUDU is here!' },
   ];
 
+  // 通关大奖：收集8颗星星后，总是获得大苹果大奖
+  const getDailyReward = () => {
+    return rewardTypes[0]; // 总是返回大奖
+  };
+
   useEffect(() => {
-    // 随机选择奖励
-    const reward = rewardTypes[Math.floor(Math.random() * rewardTypes.length)];
+    // 通关大奖：收集8颗星星后总是获得大苹果大奖
+    const reward = getDailyReward();
     setRewardType(reward);
 
     // 播放欢呼声
@@ -1798,25 +1942,124 @@ function CelebrationView({ collectedStars, onContinue, settings }) {
             {phase === 'reward' && (
               <div className="mt-8 animate-in zoom-in duration-500">
                 <div className="bg-white/90 backdrop-blur rounded-3xl p-8 shadow-2xl border-4 border-yellow-300 text-center">
-                  <div className="text-6xl mb-4">{rewardType.emoji}</div>
-                  <h2 className="text-2xl font-black text-gray-800 mb-2">恭喜获得！</h2>
-                  <p className="text-lg text-gray-600 mb-4">{rewardType.name}</p>
-                  <p className="text-sm text-gray-500 mb-6">已收藏到你的成就墙</p>
+                  {/* 🎉 通关大奖 - DUDU 云朵精灵的人类伙伴 */}
+                  {rewardType.type === 'grand_prize' ? (
+                    <div className="animate-in zoom-in duration-700">
+                      {/* DUDU 小男孩抱着大苹果 */}
+                      <div className="relative inline-block mb-6">
+                        {/* 光晕效果 */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-300 rounded-full blur-xl opacity-70 animate-pulse"></div>
 
-                  {/* 勋章卡片样式 */}
-                  {rewardType.type === 'badge' && (
-                    <div className="bg-gradient-to-br from-yellow-100 to-amber-100 rounded-2xl p-4 border-2 border-yellow-300">
-                      <div className="text-5xl mb-2">{rewardType.emoji}</div>
-                      <div className="text-xs text-gray-500">今日成就勋章</div>
-                    </div>
-                  )}
+                        {/* 角色容器 */}
+                        <div className="relative bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 border-4 border-amber-300">
+                          {/* DUDU 小男孩 SVG */}
+                          <svg viewBox="0 0 200 220" className="w-56 h-64 mx-auto drop-shadow-lg">
+                            {/* 背景大苹果 */}
+                            <g transform="translate(140, 120)">
+                              <ellipse cx="0" cy="0" rx="35" ry="40" fill="#EF4444" class="animate-bounce"/>
+                              <ellipse cx="-8" cy="-12" rx="8" ry="10" fill="#F87171" opacity="0.6"/>
+                              <path d="M0 -35 Q5 -45 0 -50 Q-5 -45 0 -35" fill="#65A30D"/>
+                              <ellipse cx="5" cy="-48" rx="6" ry="4" fill="#FDE047"/>
+                            </g>
 
-                  {/* DUDU 皮肤卡片样式 */}
-                  {rewardType.type === 'skin' && (
-                    <div className="bg-gradient-to-br from-blue-100 to-sky-100 rounded-2xl p-4 border-2 border-blue-300">
-                      <div className="text-5xl mb-2">{rewardType.emoji}</div>
-                      <div className="text-xs text-gray-500">DUDU 新皮肤</div>
+                            {/* 身体 - 大黄蜂T恤 */}
+                            <g transform="translate(100, 145)">
+                              {/* 黄色身体 */}
+                              <rect x="-22" y="0" width="44" height="50" rx="8" fill="#FCD34D"/>
+                              {/* 大黄蜂条纹 */}
+                              <rect x="-24" y="10" width="48" height="8" fill="#1F2937"/>
+                              <rect x="-24" y="25" width="48" height="6" fill="#1F2937"/>
+                              {/* dudu 文字 */}
+                              <text x="0" y="42" textAnchor="middle" fill="#1E3A8A" fontSize="10" fontWeight="bold">dudu</text>
+                            </g>
+
+                            {/* 手臂环抱着苹果 */}
+                            <g transform="translate(100, 150)">
+                              {/* 左臂伸向苹果 */}
+                              <path d="M-20 5 Q-10 15 10 -5" stroke="#FCD34D" strokeWidth="10" fill="none" strokeLinecap="round"/>
+                              <circle cx="12" cy="-5" r="6" fill="#FBBF24"/>
+                              {/* 右臂伸向苹果 */}
+                              <path d="M20 5 Q30 15 45 5" stroke="#FCD34D" strokeWidth="10" fill="none" strokeLinecap="round"/>
+                              <circle cx="47" cy="5" r="6" fill="#FBBF24"/>
+                            </g>
+
+                            {/* 头 */}
+                            <g transform="translate(100, 95)">
+                              {/* 脸 */}
+                              <ellipse cx="0" cy="0" rx="28" ry="30" fill="#FDE68A"/>
+                              {/* 腮红 */}
+                              <ellipse cx="-18" cy="8" rx="6" ry="4" fill="#FCA5A5" opacity="0.5"/>
+                              <ellipse cx="18" cy="8" rx="6" ry="4" fill="#FCA5A5" opacity="0.5"/>
+                              {/* 眼睛 */}
+                              <ellipse cx="-10" cy="-2" rx="5" ry="6" fill="#1F2937"/>
+                              <ellipse cx="10" cy="-2" rx="5" ry="6" fill="#1F2937"/>
+                              <circle cx="-8" cy="-4" r="2" fill="white"/>
+                              <circle cx="12" cy="-4" r="2" fill="white"/>
+                              {/* 眉毛 - 开心的表情 */}
+                              <path d="M-16 -12 Q-10 -15 -4 -12" stroke="#92400E" strokeWidth="2" fill="none"/>
+                              <path d="M4 -12 Q10 -15 16 -12" stroke="#92400E" strokeWidth="2" fill="none"/>
+                              {/* 开心的嘴巴 */}
+                              <path d="M-10 12 Q0 22 10 12" stroke="#DC2626" strokeWidth="3" fill="none" strokeLinecap="round"/>
+                              {/* 头发 - 浅棕色 */}
+                              <ellipse cx="0" cy="-22" rx="26" ry="15" fill="#92400E"/>
+                              <ellipse cx="-15" cy="-18" rx="8" ry="10" fill="#92400E"/>
+                              <ellipse cx="15" cy="-18" rx="8" ry="10" fill="#92400E"/>
+                            </g>
+
+                            {/* 腿 */}
+                            <g transform="translate(100, 195)">
+                              <rect x="-15" y="0" width="12" height="20" rx="4" fill="#60A5FA"/>
+                              <rect x="3" y="0" width="12" height="20" rx="4" fill="#60A5FA"/>
+                              {/* 鞋子 */}
+                              <ellipse cx="-9" cy="22" rx="8" ry="5" fill="#1F2937"/>
+                              <ellipse cx="9" cy="22" rx="8" ry="5" fill="#1F2937"/>
+                            </g>
+
+                            {/* 星星装饰 */}
+                            <g class="animate-spin" style={{transformOrigin: '30px 40px'}}>
+                              <text x="30" y="45" fontSize="16">⭐</text>
+                            </g>
+                            <g class="animate-spin" style={{transformOrigin: '170px 60px', animationDirection: 'reverse'}}>
+                              <text x="165" y="65" fontSize="14">✨</text>
+                            </g>
+                            <g class="animate-bounce">
+                              <text x="25" y="120" fontSize="12">🌟</text>
+                            </g>
+                          </svg>
+
+                          {/* 欢呼文字 */}
+                          <div className="mt-4 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-6 py-3 rounded-full animate-pulse">
+                            <span className="text-2xl font-black">🎉 DUDU 太棒了！</span>
+                          </div>
+                          <div className="mt-3 bg-green-500 text-white px-4 py-2 rounded-full">
+                            <span className="text-lg font-bold">今天的大苹果归你啦！🍎</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  ) : (
+                    <>
+                      <div className="text-6xl mb-4">{rewardType.emoji}</div>
+                      <h2 className="text-2xl font-black text-gray-800 mb-2">恭喜获得！</h2>
+                      <p className="text-lg text-gray-600 mb-4">{rewardType.name}</p>
+                      <p className="text-sm text-gray-500 mb-6">已收藏到你的成就墙</p>
+
+                      {/* 勋章卡片样式 */}
+                      {rewardType.type === 'badge' && (
+                        <div className="bg-gradient-to-br from-yellow-100 to-amber-100 rounded-2xl p-4 border-2 border-yellow-300">
+                          <div className="text-5xl mb-2">{rewardType.emoji}</div>
+                          <div className="text-xs text-gray-500">今日成就勋章</div>
+                        </div>
+                      )}
+
+                      {/* DUDU 皮肤卡片样式 */}
+                      {rewardType.type === 'skin' && (
+                        <div className="bg-gradient-to-br from-blue-100 to-sky-100 rounded-2xl p-4 border-2 border-blue-300">
+                          <div className="text-5xl mb-2">{rewardType.emoji}</div>
+                          <div className="text-xs text-gray-500">DUDU 新皮肤</div>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   <button
@@ -1938,7 +2181,7 @@ const ErrorModal = ({ errorMessage, onClose }) => (
 
 // --- Main App Component ---
 export default function App() {
-  const [view, setView] = useState('home');
+  const [view, setView] = useState('splash');  // 从启动页开始
   const [progressMap, setProgressMap] = useState({});
   const [sessionQueue, setSessionQueue] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -2186,6 +2429,11 @@ export default function App() {
     return <ParentView progressMap={progressMap} onBack={() => setView('home')} settings={settings} setSettings={setSettings} onResetData={handleResetData} />;
   }
 
+  // 启动页 - 身份认同锚点
+  if (view === 'splash') {
+    return <SplashView onComplete={() => setView('home')} settings={settings} />;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-white flex flex-col items-center justify-center p-4 w-full font-sans relative overflow-hidden">
       {/* 背景装饰云朵 - 暖色调 */}
@@ -2248,9 +2496,12 @@ export default function App() {
               </div>
             )}
           </div>
-          {/* 简化的标题 - 不占用太多空间 */}
+          {/* 简化的标题 - 带身份认同标识 */}
           <div className="text-center">
-            <h1 className="text-2xl font-black text-gray-700">DUDU 天天英语</h1>
+            <h1 className="text-2xl font-black bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 bg-clip-text text-transparent">
+              DUDU's Adventure World
+            </h1>
+            <p className="text-sm text-gray-500 font-medium mt-1">DUDU 天天英语</p>
           </div>
         </header>
 
