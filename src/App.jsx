@@ -518,7 +518,9 @@ const calculateNextProgress = (currentProgress, result, now) => {
 // 本地音频文件路径配置
 // 优先使用本地音频，如果没有则回退到 Web Speech API
 const isDev = import.meta.env.DEV;
-const BASE_PATH = isDev ? '/kids-english-app/audio/' : '/audio/';
+// 开发环境: /audio/ (vite dev server 从根路径服务)
+// 生产环境: /kids-english-app/audio/ (GitHub Pages 路径)
+const BASE_PATH = isDev ? '/audio/' : '/kids-english-app/audio/';
 
 // 生成音频文件路径的辅助函数
 const getAudioPath = (text) => {

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音频测试 - DUDU English</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 20px; }
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .test-btn {
+      padding: 15px;
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .test-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+    .test-btn.playing {
+      background: #28a745;
+      color: white;
+      border-color: #28a745;
+      animation: pulse 0.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .status {
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+    .status-line {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .status-line.success { color: #28a745; }
+    .status-line.error { color: #dc3545; }
+    .status-line.info { color: #17a2b8; }
+    .mode-toggle {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .mode-btn {
+      padding: 10px 20px;
+      margin: 0 5px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .mode-btn.active {
+      background: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔊 音频播报测试</h1>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="devMode" onclick="setMode('dev')">开发模式 (/audio/)</button>
+      <button class="mode-btn" id="prodMode" onclick="setMode('prod')">生产模式 (/kids-english-app/audio/)</button>
+    </div>
+
+    <div class="test-grid" id="testGrid"></div>
+
+    <div class="status" id="status">
+      <div class="status-line info">点击按钮测试音频播放...</div>
+    </div>
+  </div>
+
+  <script>
+    const testWords = [
+      { text: 'Apple', emoji: '🍎' },
+      { text: 'Cat', emoji: '🐱' },
+      { text: 'Dog', emoji: '🐶' },
+      { text: 'Happy', emoji: '😊' },
+      { text: 'Sun', emoji: '☀️' },
+      { text: 'Red', emoji: '🔴' },
+      { text: 'Hello world', emoji: '👋' },
+      { text: 'Good morning', emoji: '🌅' },
+      { text: 'I love you', emoji: '❤️' },
+    ];
+
+    let currentMode = 'dev';
+    const BASE_PATHS = {
+      dev: '/audio/',
+      prod: '/kids-english-app/audio/'
+    };
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('devMode').classList.toggle('active', mode === 'dev');
+      document.getElementById('prodMode').classList.toggle('active', mode === 'prod');
+      addStatus(`切换到 ${mode === 'dev' ? '开发' : '生产'} 模式: ${BASE_PATHS[mode]}`, 'info');
+    }
+
+    function getAudioPath(text) {
+      const filename = text.toLowerCase().replace(/\s+/g, '_').replace(/[^\w_]/g, '') + '.mp3';
+      return BASE_PATHS[currentMode] + filename;
+    }
+
+    function addStatus(message, type = 'info') {
+      const status = document.getElementById('status');
+      const line = document.createElement('div');
+      line.className = `status-line ${type}`;
+      line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      status.insertBefore(line, status.firstChild);
+      // 只保留最近 10 条
+      while (status.children.length > 10) {
+        status.removeChild(status.lastChild);
+      }
+    }
+
+    function playAudio(text, btn) {
+      const audioPath = getAudioPath(text);
+      addStatus(`尝试播放: ${audioPath}`, 'info');
+
+      btn.classList.add('playing');
+
+      const audio = new Audio(audioPath);
+
+      audio.onplay = () => {
+        addStatus(`✓ 正在播放本地音频: "${text}"`, 'success');
+      };
+
+      audio.onended = () => {
+        addStatus(`✓ 播放完成: "${text}"`, 'success');
+        btn.classList.remove('playing');
+      };
+
+      audio.onerror = (e) => {
+        btn.classList.remove('playing');
+        addStatus(`✗ 本地音频失败，尝试 Web Speech API: "${text}"`, 'error');
+        // 回退到 Web Speech API
+        fallbackToWebSpeech(text, btn);
+      };
+
+      audio.play().catch((err) => {
+        btn.classList.remove('playing');
+        addStatus(`✗ 播放失败: ${err.message}`, 'error');
+        fallbackToWebSpeech(text, btn);
+      });
+    }
+
+    function fallbackToWebSpeech(text, btn) {
+      if ('speechSynthesis' in window) {
+        addStatus(`使用 Web Speech API 播放: "${text}"`, 'info');
+        btn.classList.add('playing');
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-GB';
+
+        utterance.onend = () => {
+          addStatus(`✓ Web Speech API 播放完成: "${text}"`, 'success');
+          btn.classList.remove('playing');
+        };
+
+        utterance.onerror = (e) => {
+          addStatus(`✗ Web Speech API 也失败了: ${e}`, 'error');
+          btn.classList.remove('playing');
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        addStatus(`✗ 浏览器不支持 Web Speech API`, 'error');
+      }
+    }
+
+    // 初始化测试按钮
+    const grid = document.getElementById('testGrid');
+    testWords.forEach(({ text, emoji }) => {
+      const btn = document.createElement('div');
+      btn.className = 'test-btn';
+      btn.innerHTML = `${emoji}<br>${text}`;
+      btn.onclick = () => playAudio(text, btn);
+      grid.appendChild(btn);
+    });
+
+    // 页面加载时显示当前模式
+    addStatus(`当前模式: ${BASE_PATHS[currentMode]}`, 'info');
+  </script>
+</body>
+</html>
