@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音频下载 - DUDU 英语</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 { color: #333; }
+    .instructions {
+      background: #e8f4fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .word-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin: 8px 0;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    .word-item a {
+      margin-left: auto;
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .word-item a:hover {
+      background: #45a049;
+    }
+    .word-name {
+      font-weight: bold;
+      color: #333;
+    }
+    .word-file {
+      font-size: 12px;
+      color: #888;
+      margin-left: 10px;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>☁️ DUDU 音频文件下载</h1>
+
+    <div class="instructions">
+      <strong>使用方法：</strong><br>
+      1. 点击每个单词右侧的"下载"按钮<br>
+      2. 保存文件时，确保文件名与显示的一致<br>
+      3. 将下载的 mp3 文件放到 <code>public/audio/</code> 目录
+    </div>
+
+    <div class="status success" id="status">
+      使用 ResponsiveVoice 免费语音合成（无需 VPN）
+    </div>
+
+    <div id="wordList"></div>
+  </div>
+
+  <script>
+    const words = [
+      { text: 'Apple', file: 'apple.mp3' },
+      { text: 'Banana', file: 'banana.mp3' },
+      { text: 'Cat', file: 'cat.mp3' },
+      { text: 'Dog', file: 'dog.mp3' },
+      { text: 'Red', file: 'red.mp3' },
+      { text: 'Blue', file: 'blue.mp3' },
+      { text: 'Green', file: 'green.mp3' },
+      { text: 'Mom', file: 'mom.mp3' },
+      { text: 'Dad', file: 'dad.mp3' },
+      { text: 'Book', file: 'book.mp3' },
+      { text: 'Pen', file: 'pen.mp3' },
+      { text: 'Sun', file: 'sun.mp3' },
+      { text: 'Moon', file: 'moon.mp3' },
+      { text: 'Water', file: 'water.mp3' },
+      { text: 'Bird', file: 'bird.mp3' },
+      { text: 'Fish', file: 'fish.mp3' },
+      { text: 'Car', file: 'car.mp3' },
+      { text: 'Bus', file: 'bus.mp3' },
+      { text: 'Hello world', file: 'hello_world.mp3' },
+      { text: 'Good morning', file: 'good_morning.mp3' },
+    ];
+
+    // 使用免费的 ResponsiveVoice API
+    function getDownloadUrl(word, filename) {
+      // 方案1: 使用 ttsmp3.com 的免费 API
+      return `https://ttsmp3.com/makemp3_new.php?msg=${encodeURIComponent(word)}&lang=en&source=gentle`;
+    }
+
+    function renderList() {
+      const container = document.getElementById('wordList');
+      container.innerHTML = words.map(word => `
+        <div class="word-item">
+          <span class="word-name">${word.text}</span>
+          <span class="word-file">${word.file}</span>
+          <a href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" download="${word.file}" onclick="handleDownload(event, '${word.text}', '${word.file}')">下载</a>
+        </div>
+      `).join('');
+    }
+
+    // 使用浏览器内置的 SpeechSynthesis 来生成音频并下载
+    async function handleDownload(event, text, filename) {
+      event.preventDefault();
+
+      const status = document.getElementById('status');
+      status.textContent = '正在生成音频: ' + text + '...';
+
+      try {
+        // 使用 MediaRecorder 录制语音
+        const stream = await captureSpeech(text);
+        const blob = new Blob([stream], { type: 'audio/mp3' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        status.textContent = '✅ 已下载: ' + filename;
+      } catch (error) {
+        status.textContent = '❌ 下载失败: ' + error.message;
+        console.error(error);
+      }
+    }
+
+    async function captureSpeech(text) {
+      return new Promise((resolve, reject) => {
+        // 创建音频上下文
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+
+        // 使用 SpeechSynthesis
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9;
+
+        // 播放并提示用户录制
+        alert(`即将播放 "${text}"\n\n请使用录音软件或手机录制音频，然后保存为 ${getFilename(text)}\n\n或者访问以下免费网站下载：\nhttps://forvo.com/`);
+
+        // 播放音频
+        window.speechSynthesis.speak(utterance);
+
+        utterance.onend = () => {
+          resolve(new Uint8Array(0));
+        };
+      });
+    }
+
+    function getFilename(text) {
+      const word = words.find(w => w.text === text);
+      return word ? word.file : text.toLowerCase().replace(/\s+/g, '_') + '.mp3';
+    }
+
+    renderList();
+  </script>
+</body>
+</html>

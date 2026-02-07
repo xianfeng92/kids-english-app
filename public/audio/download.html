@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音频文件下载 - DUDU 天天英语</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 { text-align: center; color: #333; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 20px; }
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      color: #856404;
+    }
+    .instructions {
+      background: #d1ecf1;
+      border: 1px solid #17a2b8;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .instructions h3 { color: #0c5460; margin-bottom: 10px; }
+    .instructions ol { margin-left: 20px; color: #0c5460; }
+    .instructions li { margin: 5px 0; }
+
+    .word-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .word-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      border: 2px solid #dee2e6;
+    }
+    .word-name {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    .word-file {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+    .download-link {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      background: #667eea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .download-link:hover {
+      background: #5568d3;
+    }
+    .alt-link {
+      display: block;
+      text-align: center;
+      padding: 8px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .alt-link:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>☁️ 音频文件下载助手</h1>
+    <p class="subtitle">为 DUDU 天天英语下载单词发音文件</p>
+
+    <div class="warning">
+      <strong>⚠️ 请确保已开启 VPN</strong><br>
+      下载需要访问 Google 服务，请先开启 VPN。
+    </div>
+
+    <div class="instructions">
+      <h3>📖 下载方法（任选其一）：</h3>
+      <ol>
+        <li><strong>方法一</strong>：点击每个单词的蓝色"🔊 播放并下载"按钮，在新页面右键保存音频</li>
+        <li><strong>方法二</strong>：点击绿色"直接打开 Google 翻译"链接，手动下载</li>
+        <li><strong>方法三</strong>：使用 <a href="https://forvo.com/" target="_blank" style="color: #007bff;">Forvo.com</a> 搜索单词下载（推荐，真人发音）</li>
+      </ol>
+    </div>
+
+    <div class="word-grid" id="wordGrid"></div>
+  </div>
+
+  <script>
+    const words = [
+      { text: 'Apple', file: 'apple.mp3' },
+      { text: 'Banana', file: 'banana.mp3' },
+      { text: 'Cat', file: 'cat.mp3' },
+      { text: 'Dog', file: 'dog.mp3' },
+      { text: 'Red', file: 'red.mp3' },
+      { text: 'Blue', file: 'blue.mp3' },
+      { text: 'Green', file: 'green.mp3' },
+      { text: 'Mom', file: 'mom.mp3' },
+      { text: 'Dad', file: 'dad.mp3' },
+      { text: 'Book', file: 'book.mp3' },
+      { text: 'Pen', file: 'pen.mp3' },
+      { text: 'Sun', file: 'sun.mp3' },
+      { text: 'Moon', file: 'moon.mp3' },
+      { text: 'Water', file: 'water.mp3' },
+      { text: 'Bird', file: 'bird.mp3' },
+      { text: 'Fish', file: 'fish.mp3' },
+      { text: 'Car', file: 'car.mp3' },
+      { text: 'Bus', file: 'bus.mp3' },
+      { text: 'Hello world', file: 'hello_world.mp3' },
+      { text: 'Good morning', file: 'good_morning.mp3' },
+    ];
+
+    // Google TTS 直接链接（可以在新标签页打开并右键保存）
+    function getTTSUrl(text) {
+      return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(text)}`;
+    }
+
+    // Google 翻译页面链接（可以手动下载）
+    function getTranslateUrl(text) {
+      return `https://translate.google.com/?sl=en&tl=zh-CN&text=${encodeURIComponent(text)}&op=translate`;
+    }
+
+    // Forvo 搜索链接
+    function getForvoUrl(text) {
+      return `https://forvo.com/word/${text}/#en`;
+    }
+
+    function renderWordList() {
+      const grid = document.getElementById('wordGrid');
+      grid.innerHTML = words.map(word => `
+        <div class="word-card">
+          <div class="word-name">${word.text}</div>
+          <div class="word-file">保存为: ${word.file}</div>
+          <a href="${getTTSUrl(word.text)}" target="_blank" class="download-link">
+            🔊 播放并保存
+          </a>
+          <a href="${getTranslateUrl(word.text)}" target="_blank" class="alt-link">
+            Google 翻译
+          </a>
+          <a href="${getForvoUrl(word.text)}" target="_blank" class="alt-link" style="background: #17a2b8;">
+            Forvo (真人)
+          </a>
+        </div>
+      `).join('');
+    }
+
+    renderWordList();
+  </script>
+</body>
+</html>

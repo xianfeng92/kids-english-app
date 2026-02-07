@@ -177,9 +177,37 @@ const calculateNextProgress = (currentProgress, result, now) => {
 };
 
 // --- Custom Hook: useSpeech ---
+// 本地音频文件路径配置（单词 -> 文件路径的映射）
+// 开发环境: /kids-english-app/audio/xxx.mp3
+// 生产环境: /audio/xxx.mp3 (如果部署到根目录)
+const isDev = import.meta.env.DEV;
+const AUDIO_FILES = {
+  'Apple': isDev ? '/kids-english-app/audio/apple.mp3' : '/audio/apple.mp3',
+  'Banana': isDev ? '/kids-english-app/audio/banana.mp3' : '/audio/banana.mp3',
+  'Cat': isDev ? '/kids-english-app/audio/cat.mp3' : '/audio/cat.mp3',
+  'Dog': isDev ? '/kids-english-app/audio/dog.mp3' : '/audio/dog.mp3',
+  'Red': isDev ? '/kids-english-app/audio/red.mp3' : '/audio/red.mp3',
+  'Blue': isDev ? '/kids-english-app/audio/blue.mp3' : '/audio/blue.mp3',
+  'Green': isDev ? '/kids-english-app/audio/green.mp3' : '/audio/green.mp3',
+  'Mom': isDev ? '/kids-english-app/audio/mom.mp3' : '/audio/mom.mp3',
+  'Dad': isDev ? '/kids-english-app/audio/dad.mp3' : '/audio/dad.mp3',
+  'Book': isDev ? '/kids-english-app/audio/book.mp3' : '/audio/book.mp3',
+  'Pen': isDev ? '/kids-english-app/audio/pen.mp3' : '/audio/pen.mp3',
+  'Sun': isDev ? '/kids-english-app/audio/sun.mp3' : '/audio/sun.mp3',
+  'Moon': isDev ? '/kids-english-app/audio/moon.mp3' : '/audio/moon.mp3',
+  'Water': isDev ? '/kids-english-app/audio/water.mp3' : '/audio/water.mp3',
+  'Bird': isDev ? '/kids-english-app/audio/bird.mp3' : '/audio/bird.mp3',
+  'Fish': isDev ? '/kids-english-app/audio/fish.mp3' : '/audio/fish.mp3',
+  'Car': isDev ? '/kids-english-app/audio/car.mp3' : '/audio/car.mp3',
+  'Bus': isDev ? '/kids-english-app/audio/bus.mp3' : '/audio/bus.mp3',
+  'Hello world': isDev ? '/kids-english-app/audio/hello_world.mp3' : '/audio/hello_world.mp3',
+  'Good morning': isDev ? '/kids-english-app/audio/good_morning.mp3' : '/audio/good_morning.mp3',
+};
+
 const useSpeech = (voiceOn = true) => {
   const [speaking, setSpeaking] = useState(false);
   const [voices, setVoices] = useState([]);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -193,35 +221,119 @@ const useSpeech = (voiceOn = true) => {
     }
   }, []);
 
-  const speak = (text) => {
-    if (!voiceOn) return;
-    if (!('speechSynthesis' in window)) return;
+  // 停止当前播放
+  const stopCurrentPlayback = useCallback(() => {
+    // 停止音频
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current = null;
+    }
+    // 停止语音合成
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }, []);
 
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-
-    // 设置为英式英语 (优先匹配 en-GB)
-    utterance.lang = 'en-GB';
-    const gbVoice = voices.find(v => v.lang === 'en-GB' || v.name.includes('UK') || v.name.includes('British'));
-    if (gbVoice) {
-      utterance.voice = gbVoice;
+  // 使用 Web Speech API (回退方案)
+  const speakWithWebAPI = useCallback((text) => {
+    if (!('speechSynthesis' in window)) {
+      console.warn('Speech synthesis not supported');
+      return Promise.reject('Speech synthesis not supported');
     }
 
-    utterance.rate = 0.9;
-    utterance.pitch = 1.1;
+    console.log(`[WebSpeech] Using Web Speech API (fallback) for: "${text}"`);
+    return new Promise((resolve, reject) => {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
 
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
+      // 设置为英式英语 (优先匹配 en-GB)
+      utterance.lang = 'en-GB';
+      const gbVoice = voices.find(v => v.lang === 'en-GB' || v.name.includes('UK') || v.name.includes('British'));
+      if (gbVoice) {
+        utterance.voice = gbVoice;
+        console.log(`[WebSpeech] Using voice: ${gbVoice.name}`);
+      }
 
-    window.speechSynthesis.speak(utterance);
-  };
+      utterance.rate = 0.9;
+      utterance.pitch = 1.1;
+
+      utterance.onstart = () => setSpeaking(true);
+      utterance.onend = () => {
+        console.log(`[WebSpeech] Finished speaking: "${text}"`);
+        setSpeaking(false);
+        resolve();
+      };
+      utterance.onerror = (e) => {
+        setSpeaking(false);
+        console.warn('[WebSpeech] Speech synthesis error:', e);
+        reject(e);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    });
+  }, [voices]);
+
+  // 使用本地音频文件 (优先方案)
+  const speakWithAudioFile = useCallback((text) => {
+    return new Promise((resolve, reject) => {
+      const audioPath = AUDIO_FILES[text];
+      if (!audioPath) {
+        console.log(`[Audio] No mapped file for: "${text}"`);
+        return reject('No audio file for this text');
+      }
+
+      console.log(`[Audio] Using local audio file: "${audioPath}" for "${text}"`);
+      const audio = new Audio(audioPath);
+      audioRef.current = audio;
+
+      audio.onplay = () => setSpeaking(true);
+      audio.onended = () => {
+        console.log(`[Audio] Finished playing: "${text}"`);
+        setSpeaking(false);
+        audioRef.current = null;
+        resolve();
+      };
+      audio.onerror = (e) => {
+        console.warn(`[Audio] Error loading ${audioPath}:`, e);
+        setSpeaking(false);
+        audioRef.current = null;
+        reject(e);
+      };
+
+      audio.play().catch((err) => {
+        console.warn(`[Audio] Play error:`, err);
+        setSpeaking(false);
+        audioRef.current = null;
+        reject(err);
+      });
+    });
+  }, []);
+
+  // 主说话函数：优先本地音频，回退到 Web Speech API
+  const speak = useCallback(async (text) => {
+    if (!voiceOn) return;
+    stopCurrentPlayback();
+
+    // 先尝试本地音频文件
+    try {
+      await speakWithAudioFile(text);
+    } catch (audioError) {
+      console.log('Using Web Speech API as fallback');
+      // 本地音频失败，回退到 Web Speech API
+      try {
+        await speakWithWebAPI(text);
+      } catch (speechError) {
+        console.warn('Both audio and speech failed');
+      }
+    }
+  }, [voiceOn, stopCurrentPlayback, speakWithAudioFile, speakWithWebAPI]);
 
   // 用 useCallback 稳定 stop 函数引用
   const stop = useCallback(() => {
-    window.speechSynthesis.cancel();
+    stopCurrentPlayback();
     setSpeaking(false);
-  }, []);
+  }, [stopCurrentPlayback]);
 
   return { speak, stop, speaking };
 };

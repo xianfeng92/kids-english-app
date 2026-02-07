@@ -87,8 +87,37 @@ src/
 - **React** - UI 框架
 - **Vite** - 构建工具
 - **Tailwind CSS** - 样式框架
-- **Web Speech API** - 语音合成
+- **Web Speech API** - 语音合成（回退方案）
+- **HTML5 Audio** - 本地音频播放（优先方案）
 - **LocalStorage** - 数据持久化
+
+## 🔊 音频功能
+
+应用采用**本地音频优先，在线语音回退**的策略：
+
+1. **优先使用本地音频文件**（`public/audio/*.mp3`）
+   - 音质好，真人发音
+   - 离线可用，无网络依赖
+   - 响应速度快
+
+2. **回退到 Web Speech API**
+   - 本地音频不存在时自动切换
+   - 需要网络连接下载语音包
+   - 音质取决于浏览器
+
+### 添加音频文件
+
+将 mp3 文件放入 `public/audio/` 目录，文件名如下：
+
+```
+apple.mp3, banana.mp3, cat.mp3, dog.mp3,
+red.mp3, blue.mp3, green.mp3, mom.mp3, dad.mp3,
+book.mp3, pen.mp3, sun.mp3, moon.mp3, water.mp3,
+bird.mp3, fish.mp3, car.mp3, bus.mp3,
+hello_world.mp3, good_morning.mp3
+```
+
+详细说明请查看 [`public/audio/README.md`](public/audio/README.md)
 
 ## 📝 注意事项
 
