@@ -1,0 +1,4 @@
+  File "C:\Users\xforg\Desktop\kids-english-app\scripts\generate_vocab.py", line 151
+    'Tram', 'ÓÐ¹ìµç³µ', 'transport', '\U0001f68b'),
+                                    ^
+SyntaxError: closing parenthesis ')' does not match opening parenthesis '[' on line 7

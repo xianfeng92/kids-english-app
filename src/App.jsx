@@ -57,26 +57,364 @@ const STICKER_POOL = ['🦁', '🚀', '🌈', '🦄', '🦖', '🍭', '🎨', '�
 
 // --- 模拟数据 ---
 const ITEMS_DB = [
+  // 水果 Fruits
   { id: 'w1', type: 'word', text: 'Apple', zh: '苹果', topic: 'fruits', image: '🍎' },
   { id: 'w2', type: 'word', text: 'Banana', zh: '香蕉', topic: 'fruits', image: '🍌' },
+  { id: 'w19', type: 'word', text: 'Orange', zh: '橙子', topic: 'fruits', image: '🍊' },
+  { id: 'w20', type: 'word', text: 'Grape', zh: '葡萄', topic: 'fruits', image: '🍇' },
+  { id: 'w21', type: 'word', text: 'Strawberry', zh: '草莓', topic: 'fruits', image: '🍓' },
+  { id: 'w22', type: 'word', text: 'Peach', zh: '桃子', topic: 'fruits', image: '🍑' },
+  { id: 'w23', type: 'word', text: 'Pear', zh: '梨', topic: 'fruits', image: '🍐' },
+
+  // 动物 Animals
   { id: 'w3', type: 'word', text: 'Cat', zh: '猫', topic: 'animals', image: '🐱' },
   { id: 'w4', type: 'word', text: 'Dog', zh: '狗', topic: 'animals', image: '🐶' },
-  { id: 's1', type: 'sentence', text: 'Hello world', zh: '你好世界', topic: 'greetings', image: '👋' },
+  { id: 'w15', type: 'word', text: 'Bird', zh: '鸟', topic: 'animals', image: '🐦' },
+  { id: 'w16', type: 'word', text: 'Fish', zh: '鱼', topic: 'animals', image: '🐟' },
+  { id: 'w24', type: 'word', text: 'Rabbit', zh: '兔子', topic: 'animals', image: '🐰' },
+  { id: 'w25', type: 'word', text: 'Duck', zh: '鸭子', topic: 'animals', image: '🦆' },
+  { id: 'w26', type: 'word', text: 'Cow', zh: '奶牛', topic: 'animals', image: '🐄' },
+  { id: 'w27', type: 'word', text: 'Pig', zh: '猪', topic: 'animals', image: '🐷' },
+  { id: 'w28', type: 'word', text: 'Chicken', zh: '鸡', topic: 'animals', image: '🐔' },
+  { id: 'w29', type: 'word', text: 'Horse', zh: '马', topic: 'animals', image: '🐴' },
+  { id: 'w30', type: 'word', text: 'Elephant', zh: '大象', topic: 'animals', image: '🐘' },
+  { id: 'w31', type: 'word', text: 'Lion', zh: '狮子', topic: 'animals', image: '🦁' },
+  { id: 'w32', type: 'word', text: 'Tiger', zh: '老虎', topic: 'animals', image: '🐯' },
+  { id: 'w33', type: 'word', text: 'Monkey', zh: '猴子', topic: 'animals', image: '🐵' },
+
+  // 颜色 Colors
   { id: 'w5', type: 'word', text: 'Red', zh: '红色', topic: 'colors', image: '🔴' },
   { id: 'w6', type: 'word', text: 'Blue', zh: '蓝色', topic: 'colors', image: '🔵' },
   { id: 'w7', type: 'word', text: 'Green', zh: '绿色', topic: 'colors', image: '🟢' },
+  { id: 'w34', type: 'word', text: 'Yellow', zh: '黄色', topic: 'colors', image: '🟡' },
+  { id: 'w35', type: 'word', text: 'White', zh: '白色', topic: 'colors', image: '⚪' },
+  { id: 'w36', type: 'word', text: 'Black', zh: '黑色', topic: 'colors', image: '⚫' },
+  { id: 'w37', type: 'word', text: 'Pink', zh: '粉色', topic: 'colors', image: '🩷' },
+  { id: 'w38', type: 'word', text: 'Purple', zh: '紫色', topic: 'colors', image: '🟣' },
+  { id: 'w39', type: 'word', text: 'Orange', zh: '橙色', topic: 'colors', image: '🟠' },
+
+  // 家庭 Family
   { id: 'w8', type: 'word', text: 'Mom', zh: '妈妈', topic: 'family', image: '👩' },
   { id: 'w9', type: 'word', text: 'Dad', zh: '爸爸', topic: 'family', image: '👨' },
+  { id: 'w40', type: 'word', text: 'Baby', zh: '宝宝', topic: 'family', image: '👶' },
+  { id: 'w41', type: 'word', text: 'Boy', zh: '男孩', topic: 'family', image: '👦' },
+  { id: 'w42', type: 'word', text: 'Girl', zh: '女孩', topic: 'family', image: '👧' },
+  { id: 'w43', type: 'word', text: 'Sister', zh: '姐姐/妹妹', topic: 'family', image: '👫' },
+  { id: 'w44', type: 'word', text: 'Brother', zh: '哥哥/弟弟', topic: 'family', image: '👫' },
+  { id: 'w45', type: 'word', text: 'Grandma', zh: '奶奶', topic: 'family', image: '👵' },
+  { id: 'w46', type: 'word', text: 'Grandpa', zh: '爷爷', topic: 'family', image: '👴' },
+
+  // 学校 School
   { id: 'w10', type: 'word', text: 'Book', zh: '书', topic: 'school', image: '📚' },
   { id: 'w11', type: 'word', text: 'Pen', zh: '钢笔', topic: 'school', image: '🖊️' },
+  { id: 'w47', type: 'word', text: 'Pencil', zh: '铅笔', topic: 'school', image: '✏️' },
+  { id: 'w48', type: 'word', text: 'Bag', zh: '书包', topic: 'school', image: '🎒' },
+  { id: 'w49', type: 'word', text: 'Teacher', zh: '老师', topic: 'school', image: '👨‍🏫' },
+  { id: 'w50', type: 'word', text: 'School', zh: '学校', topic: 'school', image: '🏫' },
+
+  // 自然 Nature
   { id: 'w12', type: 'word', text: 'Sun', zh: '太阳', topic: 'nature', image: '☀️' },
   { id: 'w13', type: 'word', text: 'Moon', zh: '月亮', topic: 'nature', image: '🌙' },
   { id: 'w14', type: 'word', text: 'Water', zh: '水', topic: 'nature', image: '💧' },
-  { id: 's2', type: 'sentence', text: 'Good morning', zh: '早上好', topic: 'greetings', image: '🌅' },
-  { id: 'w15', type: 'word', text: 'Bird', zh: '鸟', topic: 'animals', image: '🐦' },
-  { id: 'w16', type: 'word', text: 'Fish', zh: '鱼', topic: 'animals', image: '🐟' },
+  { id: 'w51', type: 'word', text: 'Star', zh: '星星', topic: 'nature', image: '⭐' },
+  { id: 'w52', type: 'word', text: 'Cloud', zh: '云', topic: 'nature', image: '☁️' },
+  { id: 'w53', type: 'word', text: 'Rain', zh: '雨', topic: 'nature', image: '🌧️' },
+  { id: 'w54', type: 'word', text: 'Snow', zh: '雪', topic: 'nature', image: '❄️' },
+  { id: 'w55', type: 'word', text: 'Tree', zh: '树', topic: 'nature', image: '🌳' },
+  { id: 'w56', type: 'word', text: 'Flower', zh: '花', topic: 'nature', image: '🌸' },
+  { id: 'w57', type: 'word', text: 'Grass', zh: '草', topic: 'nature', image: '🌿' },
+
+  // 交通工具 Transport
   { id: 'w17', type: 'word', text: 'Car', zh: '汽车', topic: 'transport', image: '🚗' },
   { id: 'w18', type: 'word', text: 'Bus', zh: '公交车', topic: 'transport', image: '🚌' },
+  { id: 'w58', type: 'word', text: 'Train', zh: '火车', topic: 'transport', image: '🚂' },
+  { id: 'w59', type: 'word', text: 'Plane', zh: '飞机', topic: 'transport', image: '✈️' },
+  { id: 'w60', type: 'word', text: 'Boat', zh: '船', topic: 'transport', image: '⛵' },
+  { id: 'w61', type: 'word', text: 'Bike', zh: '自行车', topic: 'transport', image: '🚲' },
+  { id: 'w62', type: 'word', text: 'Rocket', zh: '火箭', topic: 'transport', image: '🚀' },
+
+  // 食物 Food
+  { id: 'w63', type: 'word', text: 'Bread', zh: '面包', topic: 'food', image: '🍞' },
+  { id: 'w64', type: 'word', text: 'Milk', zh: '牛奶', topic: 'food', image: '🥛' },
+  { id: 'w65', type: 'word', text: 'Egg', zh: '鸡蛋', topic: 'food', image: '🥚' },
+  { id: 'w66', type: 'word', text: 'Cake', zh: '蛋糕', topic: 'food', image: '🍰' },
+  { id: 'w67', type: 'word', text: 'Ice cream', zh: '冰淇淋', topic: 'food', image: '🍦' },
+  { id: 'w68', type: 'word', text: 'Cookie', zh: '饼干', topic: 'food', image: '🍪' },
+  { id: 'w69', type: 'word', text: 'Pizza', zh: '披萨', topic: 'food', image: '🍕' },
+  { id: 'w70', type: 'word', text: 'Rice', zh: '米饭', topic: 'food', image: '🍚' },
+
+  // 身体部位 Body
+  { id: 'w71', type: 'word', text: 'Head', zh: '头', topic: 'body', image: '🗣️' },
+  { id: 'w72', type: 'word', text: 'Eye', zh: '眼睛', topic: 'body', image: '👀️' },
+  { id: 'w73', type: 'word', text: 'Nose', zh: '鼻子', topic: 'body', image: '👃' },
+  { id: 'w74', type: 'word', text: 'Mouth', zh: '嘴巴', topic: 'body', image: '👄' },
+  { id: 'w75', type: 'word', text: 'Hand', zh: '手', topic: 'body', image: '🖐️' },
+  { id: 'w76', type: 'word', text: 'Foot', zh: '脚', topic: 'body', image: '🦶' },
+
+  // 数字 Numbers
+  { id: 'w77', type: 'word', text: 'One', zh: '一', topic: 'numbers', image: '1️⃣' },
+  { id: 'w78', type: 'word', text: 'Two', zh: '二', topic: 'numbers', image: '2️⃣' },
+  { id: 'w79', type: 'word', text: 'Three', zh: '三', topic: 'numbers', image: '3️⃣' },
+  { id: 'w80', type: 'word', text: 'Four', zh: '四', topic: 'numbers', image: '4️⃣' },
+  { id: 'w81', type: 'word', text: 'Five', zh: '五', topic: 'numbers', image: '5️⃣' },
+  { id: 'w82', type: 'word', text: 'Six', zh: '六', topic: 'numbers', image: '6️⃣' },
+  { id: 'w83', type: 'word', text: 'Seven', zh: '七', topic: 'numbers', image: '7️⃣' },
+  { id: 'w84', type: 'word', text: 'Eight', zh: '八', topic: 'numbers', image: '8️⃣' },
+  { id: 'w85', type: 'word', text: 'Nine', zh: '九', topic: 'numbers', image: '9️⃣' },
+  { id: 'w86', type: 'word', text: 'Ten', zh: '十', topic: 'numbers', image: '🔟' },
+
+  // 服装 Clothes
+  { id: 'w87', type: 'word', text: 'Hat', zh: '帽子', topic: 'clothes', image: '🧢' },
+  { id: 'w88', type: 'word', text: 'Shirt', zh: '衬衫', topic: 'clothes', image: '👕' },
+  { id: 'w89', type: 'word', text: 'Shoes', zh: '鞋子', topic: 'clothes', image: '👟' },
+  { id: 'w90', type: 'word', text: 'Dress', zh: '连衣裙', topic: 'clothes', image: '👗' },
+  { id: 'w91', type: 'word', text: 'Pants', zh: '裤子', topic: 'clothes', image: '👖' },
+
+  // 玩具 Toys
+  { id: 'w92', type: 'word', text: 'Ball', zh: '球', topic: 'toys', image: '⚽' },
+  { id: 'w93', type: 'word', text: 'Doll', zh: '洋娃娃', topic: 'toys', image: '🎎' },
+  { id: 'w94', type: 'word', text: 'Kite', zh: '风筝', topic: 'toys', image: '🪁' },
+  { id: 'w95', type: 'word', text: 'Balloon', zh: '气球', topic: 'toys', image: '🎈' },
+
+  // 问候语 Greetings
+  { id: 's1', type: 'sentence', text: 'Hello world', zh: '你好世界', topic: 'greetings', image: '👋' },
+  { id: 's2', type: 'sentence', text: 'Good morning', zh: '早上好', topic: 'greetings', image: '🌅' },
+  { id: 's3', type: 'sentence', text: 'Good night', zh: '晚安', topic: 'greetings', image: '🌙' },
+  { id: 's4', type: 'sentence', text: 'Thank you', zh: '谢谢', topic: 'greetings', image: '🙏' },
+  { id: 's5', type: 'sentence', text: 'Please', zh: '请', topic: 'greetings', image: '🙏' },
+  { id: 's6', type: 'sentence', text: 'Sorry', zh: '对不起', topic: 'greetings', image: '😊' },
+  { id: 's7', type: 'sentence', text: 'I love you', zh: '我爱你', topic: 'greetings', image: '❤️' },
+  { id: 's8', type: 'sentence', text: 'How are you', zh: '你好吗', topic: 'greetings', image: '👋' },
+
+  // 常用短语 Common Phrases
+  { id: 's9', type: 'sentence', text: 'My name is', zh: '我叫', topic: 'phrases', image: '👤' },
+  { id: 's10', type: 'sentence', text: 'I am hungry', zh: '我饿了', topic: 'phrases', image: '😋' },
+  { id: 's11', type: 'sentence', text: 'I am thirsty', zh: '我渴了', topic: 'phrases', image: '🥤' },
+  { id: 's12', type: 'sentence', text: 'Let is go', zh: '我们走吧', topic: 'phrases', image: '🚀' },
+  { id: 's13', type: 'sentence', text: 'See you later', zh: '回头见', topic: 'phrases', image: '👋' },
+  { id: 's14', type: 'sentence', text: 'Good job', zh: '做得好', topic: 'phrases', image: '👏' },
+
+  // ========== 扩展词汇 = 96 + 104 = 200 个 ========== //
+
+  // 蔬菜 Vegetables
+  { id: 'w96', type: 'word', text: 'Tomato', zh: '番茄', topic: 'vegetables', image: '🍅' },
+  { id: 'w97', type: 'word', text: 'Potato', zh: '土豆', topic: 'vegetables', image: '🥔' },
+  { id: 'w98', type: 'word', text: 'Carrot', zh: '胡萝卜', topic: 'vegetables', image: '🥕' },
+  { id: 'w99', type: 'word', text: 'Onion', zh: '洋葱', topic: 'vegetables', image: '🧅' },
+  { id: 'w100', type: 'word', text: 'Corn', zh: '玉米', topic: 'vegetables', image: '🌽' },
+  { id: 'w101', type: 'word', text: 'Broccoli', zh: '西兰花', topic: 'vegetables', image: '🥦' },
+  { id: 'w102', type: 'word', text: 'Cucumber', zh: '黄瓜', topic: 'vegetables', image: '🥒' },
+  { id: 'w103', type: 'word', text: 'Pepper', zh: '辣椒', topic: 'vegetables', image: '🌶️' },
+  { id: 'w104', type: 'word', text: 'Eggplant', zh: '茄子', topic: 'vegetables', image: '🍆' },
+  { id: 'w105', type: 'word', text: 'Cabbage', zh: '卷心菜', topic: 'vegetables', image: '🥬' },
+  { id: 'w106', type: 'word', text: 'Lettuce', zh: '生菜', topic: 'vegetables', image: '🥬' },
+  { id: 'w107', type: 'word', text: 'Spinach', zh: '菠菜', topic: 'vegetables', image: '🥗' },
+  { id: 'w108', type: 'word', text: 'Pumpkin', zh: '南瓜', topic: 'vegetables', image: '🎃' },
+  { id: 'w109', type: 'word', text: 'Mushroom', zh: '蘑菇', topic: 'vegetables', image: '🍄' },
+
+  // 更多动物
+  { id: 'w110', type: 'word', text: 'Sheep', zh: '羊', topic: 'animals', image: '🐑' },
+  { id: 'w111', type: 'word', text: 'Goat', zh: '山羊', topic: 'animals', image: '🐐' },
+  { id: 'w112', type: 'word', text: 'Mouse', zh: '老鼠', topic: 'animals', image: '🐭' },
+  { id: 'w113', type: 'word', text: 'Panda', zh: '熊猫', topic: 'animals', image: '🐼' },
+  { id: 'w114', type: 'word', text: 'Bear', zh: '熊', topic: 'animals', image: '🐻' },
+  { id: 'w115', type: 'word', text: 'Fox', zh: '狐狸', topic: 'animals', image: '🦊' },
+  { id: 'w116', type: 'word', text: 'Wolf', zh: '狼', topic: 'animals', image: '🐺' },
+  { id: 'w117', type: 'word', text: 'Deer', zh: '鹿', topic: 'animals', image: '🦌' },
+  { id: 'w118', type: 'word', text: 'Zebra', zh: '斑马', topic: 'animals', image: '🦓' },
+  { id: 'w119', type: 'word', text: 'Giraffe', zh: '长颈鹿', topic: 'animals', image: '🦒' },
+  { id: 'w120', type: 'word', text: 'Penguin', zh: '企鹅', topic: 'animals', image: '🐧' },
+  { id: 'w121', type: 'word', text: 'Octopus', zh: '章鱼', topic: 'animals', image: '🐙' },
+  { id: 'w122', type: 'word', text: 'Butterfly', zh: '蝴蝶', topic: 'animals', image: '🦋' },
+  { id: 'w123', type: 'word', text: 'Bee', zh: '蜜蜂', topic: 'animals', image: '🐝' },
+  { id: 'w124', type: 'word', text: 'Ant', zh: '蚂蚁', topic: 'animals', image: '🐜' },
+  { id: 'w125', type: 'word', text: 'Snake', zh: '蛇', topic: 'animals', image: '🐍' },
+  { id: 'w126', type: 'word', text: 'Frog', zh: '青蛙', topic: 'animals', image: '🐸' },
+
+  // 更多食物
+  { id: 'w127', type: 'word', text: 'Noodles', zh: '面条', topic: 'food', image: '🍜' },
+  { id: 'w128', type: 'word', text: 'Cheese', zh: '奶酪', topic: 'food', image: '🧀' },
+  { id: 'w130', type: 'word', text: 'Hamburger', zh: '汉堡', topic: 'food', image: '🍔' },
+  { id: 'w131', type: 'word', text: 'Hot dog', zh: '热狗', topic: 'food', image: '🌭' },
+  { id: 'w132', type: 'word', text: 'Candy', zh: '糖果', topic: 'food', image: '🍬' },
+  { id: 'w133', type: 'word', text: 'Chocolate', zh: '巧克力', topic: 'food', image: '🍫' },
+  { id: 'w134', type: 'word', text: 'Juice', zh: '果汁', topic: 'food', image: '🧃' },
+  { id: 'w135', type: 'word', text: 'Sandwich', zh: '三明治', topic: 'food', image: '🥪' },
+  { id: 'w136', type: 'word', text: 'Soup', zh: '汤', topic: 'food', image: '🍲' },
+  { id: 'w137', type: 'word', text: 'Salad', zh: '沙拉', topic: 'food', image: '🥗' },
+  { id: 'w138', type: 'word', text: 'Yogurt', zh: '酸奶', topic: 'food', image: '🥛' },
+
+  // 更多身体部位
+  { id: 'w139', type: 'word', text: 'Face', zh: '脸', topic: 'body', image: '😊' },
+  { id: 'w140', type: 'word', text: 'Ear', zh: '耳朵', topic: 'body', image: '👂' },
+  { id: 'w141', type: 'word', text: 'Tooth', zh: '牙齿', topic: 'body', image: '🦷' },
+  { id: 'w142', type: 'word', text: 'Tongue', zh: '舌头', topic: 'body', image: '👅' },
+  { id: 'w143', type: 'word', text: 'Hair', zh: '头发', topic: 'body', image: '💇' },
+  { id: 'w144', type: 'word', text: 'Arm', zh: '手臂', topic: 'body', image: '💪' },
+  { id: 'w145', type: 'word', text: 'Finger', zh: '手指', topic: 'body', image: '👆' },
+  { id: 'w146', type: 'word', text: 'Leg', zh: '腿', topic: 'body', image: '🦵' },
+  { id: 'w147', type: 'word', text: 'Knee', zh: '膝盖', topic: 'body', image: '🦵' },
+  { id: 'w148', type: 'word', text: 'Shoulder', zh: '肩膀', topic: 'body', image: '🤷' },
+
+  // 更多服装
+  { id: 'w149', type: 'word', text: 'Cap', zh: '鸭舌帽', topic: 'clothes', image: '🧢' },
+  { id: 'w150', type: 'word', text: 'T-shirt', zh: 'T恤', topic: 'clothes', image: '👕' },
+  { id: 'w151', type: 'word', text: 'Jeans', zh: '牛仔裤', topic: 'clothes', image: '👖' },
+  { id: 'w152', type: 'word', text: 'Dress', zh: '连衣裙', topic: 'clothes', image: '👗' },
+  { id: 'w153', type: 'word', text: 'Skirt', zh: '裙子', topic: 'clothes', image: '👗' },
+  { id: 'w154', type: 'word', text: 'Coat', zh: '外套', topic: 'clothes', image: '🧥' },
+  { id: 'w155', type: 'word', text: 'Jacket', zh: '夹克', topic: 'clothes', image: '🧥' },
+  { id: 'w156', type: 'word', text: 'Sweater', zh: '毛衣', topic: 'clothes', image: '🧶' },
+  { id: 'w157', type: 'word', text: 'Socks', zh: '袜子', topic: 'clothes', image: '🧦' },
+  { id: 'w158', type: 'word', text: 'Gloves', zh: '手套', topic: 'clothes', image: '🧤' },
+  { id: 'w159', type: 'word', text: 'Scarf', zh: '围巾', topic: 'clothes', image: '🧣' },
+  { id: 'w160', type: 'word', text: 'Belt', zh: '皮带', topic: 'clothes', image: '👔' },
+
+  // 更多玩具
+  { id: 'w161', type: 'word', text: 'Toy', zh: '玩具', topic: 'toys', image: '🧸' },
+  { id: 'w162', type: 'word', text: 'Puzzle', zh: '拼图', topic: 'toys', image: '🧩' },
+  { id: 'w163', type: 'word', text: 'Game', zh: '游戏', topic: 'toys', image: '🎮' },
+  { id: 'w164', type: 'word', text: 'Drum', zh: '鼓', topic: 'toys', image: '🥁' },
+  { id: 'w165', type: 'word', text: 'Trumpet', zh: '喇叭', topic: 'toys', image: '📯' },
+  { id: 'w166', type: 'word', text: 'Guitar', zh: '吉他', topic: 'toys', image: '🎸' },
+  { id: 'w167', type: 'word', text: 'Piano', zh: '钢琴', topic: 'toys', image: '🎹' },
+  { id: 'w168', type: 'word', text: 'Ball', zh: '球', topic: 'toys', image: '⚽' },
+
+  // 房子
+  { id: 'w169', type: 'word', text: 'House', zh: '房子', topic: 'house', image: '🏠' },
+  { id: 'w170', type: 'word', text: 'Room', zh: '房间', topic: 'house', image: '🛏️' },
+  { id: 'w171', type: 'word', text: 'Bed', zh: '床', topic: 'house', image: '🛏️' },
+  { id: 'w172', type: 'word', text: 'Window', zh: '窗户', topic: 'house', image: '🪟' },
+  { id: 'w173', type: 'word', text: 'Door', zh: '门', topic: 'house', image: '🚪' },
+  { id: 'w174', type: 'word', text: 'Kitchen', zh: '厨房', topic: 'house', image: '🏠' },
+  { id: 'w175', type: 'word', text: 'Bathroom', zh: '浴室', topic: 'house', image: '🚿' },
+  { id: 'w176', type: 'word', text: 'Garden', zh: '花园', topic: 'house', image: '🌻' },
+
+  // 自然天气
+  { id: 'w177', type: 'word', text: 'Wind', zh: '风', topic: 'nature', image: '💨' },
+  { id: 'w178', type: 'word', text: 'Thunder', zh: '雷', topic: 'nature', image: '⚡' },
+  { id: 'w179', type: 'word', text: 'Lightning', zh: '闪电', topic: 'nature', image: '🌩' },
+  { id: 'w180', type: 'word', text: 'Forest', zh: '森林', topic: 'nature', image: '🌲' },
+  { id: 'w181', type: 'word', text: 'River', zh: '河', topic: 'nature', image: '🌊' },
+  { id: 'w182', type: 'word', text: 'Ocean', zh: '海洋', topic: 'nature', image: '🌊' },
+  { id: 'w183', type: 'word', text: 'Rainbow', zh: '彩虹', topic: 'nature', image: '🌈' },
+  { id: 'w184', type: 'word', text: 'Beach', zh: '沙滩', topic: 'nature', image: '🏖️' },
+  { id: 'w185', type: 'word', text: 'Sand', zh: '沙子', topic: 'nature', image: '🏖️' },
+  { id: 'w186', type: 'word', text: 'Rock', zh: '石头', topic: 'nature', image: '🪨' },
+  { id: 'w187', type: 'word', text: 'Fire', zh: '火', topic: 'nature', image: '🔥' },
+
+  // 更多交通
+  { id: 'w188', type: 'word', text: 'Motorcycle', zh: '摩托车', topic: 'transport', image: '🏍️' },
+  { id: 'w189', type: 'word', text: 'Truck', zh: '卡车', topic: 'transport', image: '🚚' },
+  { id: 'w190', type: 'word', text: 'Taxi', zh: '出租车', topic: 'transport', image: '🚕' },
+  { id: 'w191', type: 'word', text: 'Subway', zh: '地铁', topic: 'transport', image: '🚇' },
+  { id: 'w192', type: 'word', text: 'Ship', zh: '大船', topic: 'transport', image: '🚢' },
+  { id: 'w193', type: 'word', text: 'Sailboat', zh: '帆船', topic: 'transport', image: '⛵' },
+  { id: 'w194', type: 'word', text: 'Ambulance', zh: '救护车', topic: 'transport', image: '🚑' },
+  { id: 'w195', type: 'word', text: 'Police car', zh: '警车', topic: 'transport', image: '🚓' },
+  { id: 'w196', type: 'word', text: 'Fire truck', zh: '消防车', topic: 'transport', image: '🚒' },
+
+  // 学校用品
+  { id: 'w197', type: 'word', text: 'Desk', zh: '课桌', topic: 'school', image: '🗂️' },
+  { id: 'w198', type: 'word', text: 'Chair', zh: '椅子', topic: 'school', image: '🪑' },
+  { id: 'w199', type: 'word', text: 'Paper', zh: '纸', topic: 'school', image: '📄' },
+  { id: 'w200', type: 'word', text: 'Eraser', zh: '橡皮', topic: 'school', image: '🧽' },
+  { id: 'w201', type: 'word', text: 'Ruler', zh: '尺子', topic: 'school', image: '📏' },
+  { id: 'w202', type: 'word', text: 'Glue', zh: '胶水', topic: 'school', image: '🧴' },
+  { id: 'w203', type: 'word', text: 'Scissors', zh: '剪刀', topic: 'school', image: '✂️' },
+  { id: 'w204', type: 'word', text: 'Backpack', zh: '背包', topic: 'school', image: '🎒' },
+  { id: 'w205', type: 'word', text: 'Crayon', zh: '蜡笔', topic: 'school', image: '🖍️' },
+  { id: 'w206', type: 'word', text: 'Paint', zh: '颜料', topic: 'school', image: '🎨' },
+
+  // 形状
+  { id: 'w207', type: 'word', text: 'Circle', zh: '圆形', topic: 'shapes', image: '⭕' },
+  { id: 'w208', type: 'word', text: 'Square', zh: '正方形', topic: 'shapes', image: '⬜' },
+  { id: 'w209', type: 'word', text: 'Triangle', zh: '三角形', topic: 'shapes', image: '🔺' },
+  { id: 'w210', type: 'word', text: 'Rectangle', zh: '长方形', topic: 'shapes', image: '▬' },
+  { id: 'w211', type: 'word', text: 'Star', zh: '星星', topic: 'shapes', image: '⭐' },
+  { id: 'w212', type: 'word', text: 'Heart', zh: '心形', topic: 'shapes', image: '❤️' },
+  { id: 'w213', type: 'word', text: 'Diamond', zh: '菱形', topic: 'shapes', image: '💎' },
+  { id: 'w214', type: 'word', text: 'Oval', zh: '椭圆', topic: 'shapes', image: '0️⃣' },
+
+  // 方向
+  { id: 'w215', type: 'word', text: 'Up', zh: '上', topic: 'directions', image: '⬆️' },
+  { id: 'w216', type: 'word', text: 'Down', zh: '下', topic: 'directions', image: '⬇️' },
+  { id: 'w217', type: 'word', text: 'Left', zh: '左', topic: 'directions', image: '⬅️' },
+  { id: 'w218', type: 'word', text: 'Right', zh: '右', topic: 'directions', image: '➡️' },
+  { id: 'w219', type: 'word', text: 'Front', zh: '前面', topic: 'directions', image: '⬆️' },
+  { id: 'w220', type: 'word', text: 'Back', zh: '后面', topic: 'directions', image: '⬇️' },
+  { id: 'w221', type: 'word', text: 'Inside', zh: '里面', topic: 'directions', image: '🏠' },
+  { id: 'w222', type: 'word', text: 'Outside', zh: '外面', topic: 'directions', image: '🌳' },
+
+  // 感觉
+  { id: 'w223', type: 'word', text: 'Happy', zh: '快乐', topic: 'feelings', image: '😊' },
+  { id: 'w224', type: 'word', text: 'Sad', zh: '伤心', topic: 'feelings', image: '😢' },
+  { id: 'w225', type: 'word', text: 'Angry', zh: '生气', topic: 'feelings', image: '😠' },
+  { id: 'w226', type: 'word', text: 'Tired', zh: '累', topic: 'feelings', image: '😴' },
+  { id: 'w227', type: 'word', text: 'Scared', zh: '害怕', topic: 'feelings', image: '😨' },
+  { id: 'w228', type: 'word', text: 'Surprised', zh: '惊讶', topic: 'feelings', image: '😲' },
+  { id: 'w229', type: 'word', text: 'Excited', zh: '兴奋', topic: 'feelings', image: '🤩' },
+  { id: 'w230', type: 'word', text: 'Sick', zh: '生病', topic: 'feelings', image: '🤒' },
+
+  // 更多数字
+  { id: 'w231', type: 'word', text: 'Twenty', zh: '二十', topic: 'numbers', image: '🔟' },
+  { id: 'w232', type: 'word', text: 'Thirty', zh: '三十', topic: 'numbers', image: '30' },
+  { id: 'w233', type: 'word', text: 'Forty', zh: '四十', topic: 'numbers', image: '40' },
+  { id: 'w234', type: 'word', text: 'Fifty', zh: '五十', topic: 'numbers', image: '50' },
+  { id: 'w235', type: 'word', text: 'Hundred', zh: '一百', topic: 'numbers', image: '💯' },
+
+  // 颜色更多
+  { id: 'w236', type: 'word', text: 'Brown', zh: '棕色', topic: 'colors', image: '🟤' },
+  { id: 'w237', type: 'word', text: 'Gray', zh: '灰色', topic: 'colors', image: '🩶' },
+  { id: 'w238', type: 'word', text: 'Silver', zh: '银色', topic: 'colors', image: '🥈' },
+  { id: 'w239', type: 'word', text: 'Gold', zh: '金色', topic: 'colors', image: '🟨' },
+
+  // 更多水果
+  { id: 'w240', type: 'word', text: 'Watermelon', zh: '西瓜', topic: 'fruits', image: '🍉' },
+  { id: 'w241', type: 'word', text: 'Cherry', zh: '樱桃', topic: 'fruits', image: '🍒' },
+  { id: 'w242', type: 'word', text: 'Lemon', zh: '柠檬', topic: 'fruits', image: '🍋' },
+  { id: 'w243', type: 'word', text: 'Mango', zh: '芒果', topic: 'fruits', image: '🥭' },
+  { id: 'w244', type: 'word', text: 'Kiwi', zh: '猕猴桃', topic: 'fruits', image: '🥝' },
+  { id: 'w245', type: 'word', text: 'Pineapple', zh: '菠萝', topic: 'fruits', image: '🍍' },
+  { id: 'w246', type: 'word', text: 'Coconut', zh: '椰子', topic: 'fruits', image: '🥥' },
+  { id: 'w247', type: 'word', text: 'Papaya', zh: '木瓜', topic: 'fruits', image: '🍈' },
+  { id: 'w248', type: 'word', text: 'Avocado', zh: '牛油果', topic: 'fruits', image: '🥑' },
+
+  // 更多问候语
+  { id: 's15', type: 'sentence', text: 'Good night', zh: '晚安', topic: 'greetings', image: '🌙' },
+  { id: 's16', type: 'sentence', text: 'Thank you', zh: '谢谢', topic: 'greetings', image: '🙏' },
+  { id: 's17', type: 'sentence', text: 'Please', zh: '请', topic: 'greetings', image: '🙏' },
+  { id: 's18', type: 'sentence', text: 'Sorry', zh: '对不起', topic: 'greetings', image: '😊' },
+  { id: 's19', type: 'sentence', text: 'I love you', zh: '我爱你', topic: 'greetings', image: '❤️' },
+  { id: 's20', type: 'sentence', text: 'How are you', zh: '你好吗', topic: 'greetings', image: '👋' },
+  { id: 's21', type: 'sentence', text: 'Nice to meet you', zh: '很高兴认识你', topic: 'greetings', image: '🤝' },
+  { id: 's22', type: 'sentence', text: 'See you', zh: '再见', topic: 'greetings', image: '👋' },
+  { id: 's23', type: 'sentence', text: 'Have a nice day', zh: '祝你今天愉快', topic: 'greetings', image: '😊' },
+
+  // 更多短语
+  { id: 's24', type: 'sentence', text: 'What is your name', zh: '你叫什么名字', topic: 'phrases', image: '❓' },
+  { id: 's25', type: 'sentence', text: 'How old are you', zh: '你几岁了', topic: 'phrases', image: '🎂' },
+  { id: 's26', type: 'sentence', text: 'Where are you from', zh: '你来自哪里', topic: 'phrases', image: '🌍' },
+  { id: 's27', type: 'sentence', text: 'What do you like', zh: '你喜欢什么', topic: 'phrases', image: '❤️' },
+  { id: 's28', type: 'sentence', text: 'Let us play', zh: '我们一起玩吧', topic: 'phrases', image: '🎮' },
+  { id: 's29', type: 'sentence', text: 'I do not understand', zh: '我不明白', topic: 'phrases', image: '🤔' },
+  { id: 's30', type: 'sentence', text: 'Can you help me', zh: '你能帮我吗', topic: 'phrases', image: '🙏' },
+  { id: 's31', type: 'sentence', text: 'You are welcome', zh: '不客气', topic: 'phrases', image: '😊' },
+  { id: 's32', type: 'sentence', text: 'No problem', zh: '没问题', topic: 'phrases', image: '😊' },
+  { id: 's33', type: 'sentence', text: 'I do not know', zh: '我不知道', topic: 'phrases', image: '🤷' },
+  { id: 's34', type: 'sentence', text: 'I like it', zh: '我喜欢', topic: 'phrases', image: '😍' },
+  { id: 's35', type: 'sentence', text: 'I want this', zh: '我想要这个', topic: 'phrases', image: '👆' },
+  { id: 's36', type: 'sentence', text: 'Look at this', zh: '看这个', topic: 'phrases', image: '👀️' },
+  { id: 's37', type: 'sentence', text: 'Come here', zh: '过来', topic: 'phrases', image: '👉' },
+  { id: 's38', type: 'sentence', text: 'Go away', zh: '走开', topic: 'phrases', image: '🚫' },
+  { id: 's39', type: 'sentence', text: 'Stop', zh: '停', topic: 'phrases', image: '🛑' },
+  { id: 's40', type: 'sentence', text: 'Wait', zh: '等等', topic: 'phrases', image: '⏸' },
+  { id: 's41', type: 'sentence', text: 'Go', zh: '走', topic: 'phrases', image: '🚶' },
+  { id: 's42', type: 'sentence', text: 'Run', zh: '跑', topic: 'phrases', image: '🏃' },
+  { id: 's43', type: 'sentence', text: 'Jump', zh: '跳', topic: 'phrases', image: '🦘' },
+  { id: 's44', type: 'sentence', text: 'Dance', zh: '跳舞', topic: 'phrases', image: '💃' },
+  { id: 's45', type: 'sentence', text: 'Sing a song', zh: '唱首歌', topic: 'phrases', image: '🎤' },
+  { id: 's46', type: 'sentence', text: 'Draw a picture', zh: '画幅画', topic: 'phrases', image: '🎨' },
 ];
 
 // --- 助手函数 ---
@@ -177,31 +515,16 @@ const calculateNextProgress = (currentProgress, result, now) => {
 };
 
 // --- Custom Hook: useSpeech ---
-// 本地音频文件路径配置（单词 -> 文件路径的映射）
-// 开发环境: /kids-english-app/audio/xxx.mp3
-// 生产环境: /audio/xxx.mp3 (如果部署到根目录)
+// 本地音频文件路径配置
+// 优先使用本地音频，如果没有则回退到 Web Speech API
 const isDev = import.meta.env.DEV;
-const AUDIO_FILES = {
-  'Apple': isDev ? '/kids-english-app/audio/apple.mp3' : '/audio/apple.mp3',
-  'Banana': isDev ? '/kids-english-app/audio/banana.mp3' : '/audio/banana.mp3',
-  'Cat': isDev ? '/kids-english-app/audio/cat.mp3' : '/audio/cat.mp3',
-  'Dog': isDev ? '/kids-english-app/audio/dog.mp3' : '/audio/dog.mp3',
-  'Red': isDev ? '/kids-english-app/audio/red.mp3' : '/audio/red.mp3',
-  'Blue': isDev ? '/kids-english-app/audio/blue.mp3' : '/audio/blue.mp3',
-  'Green': isDev ? '/kids-english-app/audio/green.mp3' : '/audio/green.mp3',
-  'Mom': isDev ? '/kids-english-app/audio/mom.mp3' : '/audio/mom.mp3',
-  'Dad': isDev ? '/kids-english-app/audio/dad.mp3' : '/audio/dad.mp3',
-  'Book': isDev ? '/kids-english-app/audio/book.mp3' : '/audio/book.mp3',
-  'Pen': isDev ? '/kids-english-app/audio/pen.mp3' : '/audio/pen.mp3',
-  'Sun': isDev ? '/kids-english-app/audio/sun.mp3' : '/audio/sun.mp3',
-  'Moon': isDev ? '/kids-english-app/audio/moon.mp3' : '/audio/moon.mp3',
-  'Water': isDev ? '/kids-english-app/audio/water.mp3' : '/audio/water.mp3',
-  'Bird': isDev ? '/kids-english-app/audio/bird.mp3' : '/audio/bird.mp3',
-  'Fish': isDev ? '/kids-english-app/audio/fish.mp3' : '/audio/fish.mp3',
-  'Car': isDev ? '/kids-english-app/audio/car.mp3' : '/audio/car.mp3',
-  'Bus': isDev ? '/kids-english-app/audio/bus.mp3' : '/audio/bus.mp3',
-  'Hello world': isDev ? '/kids-english-app/audio/hello_world.mp3' : '/audio/hello_world.mp3',
-  'Good morning': isDev ? '/kids-english-app/audio/good_morning.mp3' : '/audio/good_morning.mp3',
+const BASE_PATH = isDev ? '/kids-english-app/audio/' : '/audio/';
+
+// 生成音频文件路径的辅助函数
+const getAudioPath = (text) => {
+  // 将文本转换为文件名（小写，空格替换为下划线）
+  const filename = text.toLowerCase().replace(/\s+/g, '_').replace(/[^\w_]/g, '') + '.mp3';
+  return BASE_PATH + filename;
 };
 
 const useSpeech = (voiceOn = true) => {
@@ -274,35 +597,34 @@ const useSpeech = (voiceOn = true) => {
     });
   }, [voices]);
 
-  // 使用本地音频文件 (优先方案)
+  // 使用本地音频文件 (优先方案) - 动态生成路径
   const speakWithAudioFile = useCallback((text) => {
     return new Promise((resolve, reject) => {
-      const audioPath = AUDIO_FILES[text];
-      if (!audioPath) {
-        console.log(`[Audio] No mapped file for: "${text}"`);
-        return reject('No audio file for this text');
-      }
+      const audioPath = getAudioPath(text);
+      console.log(`[Audio] Trying local audio: "${audioPath}" for "${text}"`);
 
-      console.log(`[Audio] Using local audio file: "${audioPath}" for "${text}"`);
       const audio = new Audio(audioPath);
       audioRef.current = audio;
 
-      audio.onplay = () => setSpeaking(true);
+      audio.onplay = () => {
+        console.log(`[Audio] ✓ Playing local audio for: "${text}"`);
+        setSpeaking(true);
+      };
       audio.onended = () => {
-        console.log(`[Audio] Finished playing: "${text}"`);
+        console.log(`[Audio] ✓ Finished playing: "${text}"`);
         setSpeaking(false);
         audioRef.current = null;
         resolve();
       };
       audio.onerror = (e) => {
-        console.warn(`[Audio] Error loading ${audioPath}:`, e);
+        console.warn(`[Audio] ✗ Local audio not available, will use Web Speech API`);
         setSpeaking(false);
         audioRef.current = null;
-        reject(e);
+        reject(e); // 传递错误，让主函数回退到 Web Speech
       };
 
       audio.play().catch((err) => {
-        console.warn(`[Audio] Play error:`, err);
+        console.warn(`[Audio] ✗ Play failed, will use Web Speech API`);
         setSpeaking(false);
         audioRef.current = null;
         reject(err);
